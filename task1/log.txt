@@ -1,0 +1,23 @@
+commit b29967ea22986e6e7c0df9607f10b40ff1738888
+Author: Raman Buyak <xjordward@gmail.com>
+Date:   Thu Feb 8 22:05:15 2018 +0300
+
+    add task1/status.txt
+
+commit d428abecb69a4af4b2b95b1868ee6a464c85824f
+Author: Raman Buyak <xjordward@gmail.com>
+Date:   Thu Feb 8 21:47:51 2018 +0300
+
+    add .gitignore
+
+commit 2df8c5bce8ac7147c7fbca50b3caffc6c550376e
+Author: Raman Buyak <xjordward@gmail.com>
+Date:   Tue Feb 6 09:31:41 2018 +0300
+
+    add HelloWorld.txt
+
+commit 5136353be2d136ad877d7543da0e9aaae2434a78
+Author: Kernstall <evial@bk.ru>
+Date:   Tue Feb 6 08:46:48 2018 +0300
+
+    Initial commit
