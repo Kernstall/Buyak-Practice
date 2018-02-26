@@ -1,5 +1,5 @@
 body{
-    margin: 0px;
+    margin: 0;
     min-width: fit-content;
     background-color: mintcream;
 }
@@ -67,7 +67,7 @@ img::selection {
     margin: 0px;
     padding-top: 14px;
 }
-a{
+.headerLink{
     text-decoration: none;
     height: 50px;
     margin: 0px;
@@ -192,7 +192,7 @@ p.postTime{
     height: 20px;
     font-size: 16px;
     background-color: cornflowerblue;
-    border-radius: 8px 8px 8px 8px;
+    border-radius: 8px;
     color: #fefac0;
     display: inline-block;
     padding: 0px 5px 0px 5px;
@@ -224,7 +224,7 @@ p.postTime{
     background-color: dimgrey;
     width: 90px;
     height: 20px;
-    border-radius: 8px 8px 8px 8px;
+    border-radius: 8px;
     color: #fefac0;
     text-align: center;
 }
@@ -261,6 +261,7 @@ p.postTime{
 }
 .postDescription{
     font-size: 17px;
+    margin: 20px 10px 20px 50px;
     font-family: "Arial Rounded MT Bold";
 }
 
@@ -290,6 +291,10 @@ p.postTime{
     position: absolute;
     top: 0px;
     padding-left: 10px;
+}
+.filterProps{
+    margin-left: 10px;
+    font-size: 18px;
 }
 
 @media (min-width: 960px) {
