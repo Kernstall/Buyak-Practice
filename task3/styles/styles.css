@@ -269,10 +269,26 @@ p.postTime{
     position: absolute;
     right: 0px;
     width: 300px;
-    height: 500px;
+    height: 430px;
     background-color: white;
     border: black 1px solid;
-    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+.inputHolder{
+    margin: 50px 0px 0px 20px;
+    height: 26px;
+    position: relative;
+}
+.inputField{
+    display: inline;
+    border-radius: 3px;
+    height: 22px;
+    width: 180px;
+    margin-right: 35px;
+    position: absolute;
+    top: 0px;
+    padding-left: 10px;
 }
 
 @media (min-width: 960px) {
@@ -292,4 +308,5 @@ p.postTime{
     .postImg{
         width: 720px;
     }
+
 }

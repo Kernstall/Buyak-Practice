@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/w3schools.css">
     <script src="resources/hardcode.js" type="text/javascript" defer></script>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -361,7 +362,36 @@
 
         <div class="filterPanel">
             <div class="stickyFilterScroller">
-                <div class="filter"></div>
+                <div class="filter">
+                    <p style="margin-left: 10px; font-size: 18px;">Filter properties:</p>
+                    <div class="inputHolder">
+                        <input class="inputField" type="text" name="usernameFilter" placeholder="Username">
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="inputHolder">
+                        <input type="date" name="bday" class="inputField">
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="inputHolder">
+                        <input list="browsers" name="browser" class="inputField">
+                        <datalist id="browsers">
+                            <option value="dynamic js options">
+
+                            <option value="will be">
+
+                            <option value="here">
+                        </datalist>
+                    </div>
+
+                    <div class="filterHashTagContainer"></div>
+
+                </div>
                 <div class="filterButton" onclick="filterDispel()"></div>
         </div>
         </div>
@@ -377,7 +407,7 @@
             </tr>
             <tr>
                 <td>16.02.2018</td>
-                <td>3 course, group 2</td>
+                <td>4 semestre, group 2</td>
             </tr>
             <tr>
                 <td>xjordward@gmail.com</td>

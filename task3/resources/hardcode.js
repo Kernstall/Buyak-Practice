@@ -1,12 +1,12 @@
 function filterDispel(){
     var filter =document.getElementsByClassName('filter')[0];
 
-    var display = filter.style.display;
+    var display = filter.style.opacity;
 
-    if(display == "none"){
-        filter.style.display = "inherit";
+    if(display == 0){
+        filter.style.opacity =1;
     }
     else{
-        filter.style.display = "none";
+        filter.style.opacity =0;
     }
 }
