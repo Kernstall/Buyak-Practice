@@ -1,7 +1,7 @@
 body{
     margin: 0px;
     min-width: fit-content;
-    background-color: #F0E68C;
+    background-color: mintcream;
 }
 img::selection {
     background: transparent;
@@ -10,13 +10,14 @@ img::selection {
     background-color: #FF8C00;
 }
 .header{
-    background-color: #ffc957;
+    background-color: firebrick;
     height: 50px;
     width: 100%;
     position: sticky;
     top: 0px;
     z-index: 666;
 }
+
 .homeWrapper{
      float: left;
      width: 80px;
@@ -53,7 +54,7 @@ img::selection {
     font-size: 20px;
     font-family: sans-serif;
     text-align: center;
-    color: #898989;
+    color: #fefac0;
     margin: 0px;
     padding-top: 14px;
 }
@@ -83,10 +84,9 @@ a{
     padding: 0px 5px 0px 5px;
 }
 .footer{
-    background-color: #ffc957;
+    background-color: firebrick;
     height: 80px;
     width: 100%;
-    min-width: 450px;
 }
 .footerTable{
     padding-top: 10px;
@@ -94,15 +94,15 @@ a{
     font-family: sans-serif;
     font-size: 14px;
     height: 100%;
-    width: 100%;
+    width: 500px;
+    margin: auto;
     color: #ffffff;
 }
 .feedList{
-    margin: auto;
-    width: 500px;
-    min-width: 500px;
+    width: inherit;
     background-color: inherit;
     top: 50px;
+    display: table-cell;
 }
 .postWrapper{
     width: 100%;
@@ -119,8 +119,7 @@ a{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 100%;
-    max-width: 450px;
+    width: 420px;
 }
 h5.posterName{
 
@@ -208,21 +207,23 @@ p.postTime{
     background: transparent;
 }
 .picAndDescrHolder{
-    width: 450px;
+    width: 420px;
     display: table-cell;
 }
+
 .informativeHeader{
     width: 500px;
     min-width: 500px;
     margin: auto;
     height: inherit;
 }
+
 .loadMore{
     margin: auto;
     margin-bottom: 10px;
     background-color: dimgrey;
     width: 90px;
-    height: 25px;
+    height: 20px;
     border-radius: 8px 8px 8px 8px;
     color: #fefac0;
     text-align: center;
@@ -232,4 +233,63 @@ p.postTime{
 }
 .loadMore::selection {
     background: transparent;
+}
+.filterButton{
+    -webkit-mask-image: url(menu.png);
+    float: right;
+    width: 48px;
+    height: 48px;
+    background-color: dimgrey;
+    z-index: 124;
+}
+.filterButton:hover{
+    background-color: black;
+}
+.stickyFilterScroller{
+    position: sticky;
+    top: 65px;
+}
+.feedAndFilterHolder{
+    margin: auto;
+    width: 500px;
+}
+.filterPanel{
+    margin-right: 40px;
+    height: inherit;
+    position:relative;
+    display: table-cell;
+}
+.postDescription{
+    font-size: 17px;
+    font-family: "Arial Rounded MT Bold";
+}
+
+
+.filter{
+    position: absolute;
+    right: 0px;
+    width: 300px;
+    height: 500px;
+    background-color: white;
+    border: black 1px solid;
+    display: none;
+}
+
+@media (min-width: 960px) {
+    .informativeHeader {
+        width: 850px;
+        min-width: 850px;
+    }
+    .feedAndFilterHolder{
+        width: 850px;
+    }
+    .footerTable{
+        width: 850px;
+    }
+    .picAndDescrHolder{
+        width: 780px;
+    }
+    .postImg{
+        width: 720px;
+    }
 }
