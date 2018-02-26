@@ -5,8 +5,10 @@ function filterDispel(){
 
     if(display == 0){
         filter.style.opacity =1;
+        filter.style.display ="inherit";
     }
     else{
         filter.style.opacity =0;
+        filter.style.display ="none";
     }
 }
