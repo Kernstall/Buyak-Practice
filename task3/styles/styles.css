@@ -1,0 +1,318 @@
+body{
+    margin: 0;
+    min-width: fit-content;
+    background-color: mintcream;
+}
+img::selection {
+    background: transparent;
+}
+.homeWrapper:hover{
+    background-color: #FF8C00;
+}
+.header{
+    background-color: firebrick;
+    height: 50px;
+    width: 100%;
+    position: sticky;
+    top: 0px;
+    z-index: 666;
+}
+
+.homeWrapper{
+     float: left;
+     width: 80px;
+     height: inherit;
+     background-color: inherit;
+ }
+.userAvatarWrapper{
+    float: left;
+    width: 60px;
+    height: inherit;
+    background-color: inherit;
+}
+.logOutWrapper{
+    padding-right: 10px;
+    float: right;
+    width: 80px;
+    height: inherit;
+    background-color: inherit;
+}
+.logOutWrapper:hover{
+    background-color: #FF8C00;
+}
+.userWrapper{
+    float: right;
+    width: 160px;
+    height: inherit;
+    background-color: inherit;
+}
+.userWrapper:hover{
+    background-color: #FF8C00;
+}
+.homeH3{
+
+    font-size: 20px;
+    font-family: sans-serif;
+    text-align: center;
+    color: #fefac0;
+    margin: 0px;
+    padding-top: 14px;
+}
+.logOutH3{
+
+    font-size: 20px;
+    font-family: sans-serif;
+    text-align: center;
+    color: #fefac0;
+    margin: 0px;
+    padding-top: 14px;
+}
+.headerLink{
+    text-decoration: none;
+    height: 50px;
+    margin: 0px;
+}
+.uploadPic{
+    height: 50px;
+    width: 50px;
+    padding-left: 15px;
+}
+
+.userAvatarPic{
+    height: 50px;
+    width: 50px;
+    padding: 0px 5px 0px 5px;
+}
+.footer{
+    background-color: firebrick;
+    height: 80px;
+    width: 100%;
+}
+.footerTable{
+    padding-top: 10px;
+    padding-left: 15px;
+    font-family: sans-serif;
+    font-size: 14px;
+    height: 100%;
+    width: 500px;
+    margin: auto;
+    color: #ffffff;
+}
+.feedList{
+    width: inherit;
+    background-color: inherit;
+    top: 50px;
+    display: table-cell;
+}
+.postWrapper{
+    width: 100%;
+    height: fit-content;
+    border: 0px solid #898989;
+    border-bottom-width: 1px;
+    padding-bottom: 5px;
+    margin: 0px 0px 10px 0px;
+}
+.postWrapper::selection {
+    background: transparent;
+}
+.postImg{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 420px;
+}
+h5.posterName{
+
+    font-size: 16px;
+    font-family: sans-serif;
+    color: black;
+    display: inline-block;
+    padding-left: 25px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+p.postTime{
+    font-size: 10px;
+    font-family: sans-serif;
+    color: #696969;
+    display: inline-block;
+    float: right;
+    margin-right: 45px;
+}
+.postTime::selection {
+    background: transparent;
+}
+.likePanel{
+    display: table-cell;
+    height: inherit;
+    position:relative;
+    width: 50px;
+}
+.likeMask {
+    -webkit-mask-image: url(favorite1.png);
+    width:36px;
+    height:36px;
+    background-color: black;
+    position: absolute;
+    bottom: 25px;
+
+}
+.likeMask:hover{
+    background-color: #B22222;
+}
+.editMask {
+    -webkit-mask-image: url(edit.png);
+    width:36px;
+    height:36px;
+    background-color: #696969;
+    margin-bottom: 5px;
+    float: top;
+    position: absolute;
+    top: 0px;
+}
+.editMask:hover{
+    background-color: black;
+}
+.removeMask {
+    -webkit-mask-image: url(remove.png);
+    width:36px;
+    height:36px;
+    background-color: #696969;
+    margin-bottom: 5px;
+    position: absolute;
+    top: 41px;
+}
+.removeMask:hover{
+    background-color: black;
+}
+.postBodyHolder{
+    height: 100%;
+}
+.hashTag{
+    height: 20px;
+    font-size: 16px;
+    background-color: cornflowerblue;
+    border-radius: 8px;
+    color: #fefac0;
+    display: inline-block;
+    padding: 0px 5px 0px 5px;
+    margin-bottom: 1px;
+}
+.hashTagHolder{
+}
+.hashTag::selection {
+    background: transparent;
+}
+.hashTagHolder::selection {
+    background: transparent;
+}
+.picAndDescrHolder{
+    width: 420px;
+    display: table-cell;
+}
+
+.informativeHeader{
+    width: 500px;
+    min-width: 500px;
+    margin: auto;
+    height: inherit;
+}
+
+.loadMore{
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: dimgrey;
+    width: 90px;
+    height: 20px;
+    border-radius: 8px;
+    color: #fefac0;
+    text-align: center;
+}
+.loadMore:hover{
+    background-color: black;
+}
+.loadMore::selection {
+    background: transparent;
+}
+.filterButton{
+    -webkit-mask-image: url(menu.png);
+    float: right;
+    width: 48px;
+    height: 48px;
+    background-color: dimgrey;
+    z-index: 124;
+}
+.filterButton:hover{
+    background-color: black;
+}
+.stickyFilterScroller{
+    position: sticky;
+    top: 65px;
+}
+.feedAndFilterHolder{
+    margin: auto;
+    width: 500px;
+}
+.filterPanel{
+    margin-right: 40px;
+    height: inherit;
+    position:relative;
+    display: table-cell;
+}
+.postDescription{
+    font-size: 17px;
+    margin: 20px 10px 20px 50px;
+    font-family: "Arial Rounded MT Bold";
+}
+
+
+.filter{
+    position: absolute;
+    right: 0px;
+    width: 300px;
+    height: 430px;
+    background-color: white;
+    border: black 1px solid;
+    opacity: 0;
+    display: none;
+    transition: opacity 0.5s ease-out;
+}
+.inputHolder{
+    margin: 50px 0px 0px 20px;
+    height: 26px;
+    position: relative;
+}
+.inputField{
+    display: inline;
+    border-radius: 3px;
+    height: 22px;
+    width: 180px;
+    margin-right: 35px;
+    position: absolute;
+    top: 0px;
+    padding-left: 10px;
+}
+.filterProps{
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+@media (min-width: 960px) {
+    .informativeHeader {
+        width: 850px;
+        min-width: 850px;
+    }
+    .feedAndFilterHolder{
+        width: 850px;
+    }
+    .footerTable{
+        width: 850px;
+    }
+    .picAndDescrHolder{
+        width: 780px;
+    }
+    .postImg{
+        width: 720px;
+    }
+
+}
