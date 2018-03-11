@@ -116,17 +116,15 @@ const POST_API = (function(){
                             return false;
                     }
                     if (filterConfig.hashTags) {
-                        let hash1 = value.hashTags;
-                        let hash2 = filterConfig.hashTags;
-                        let flag = true;
-                        hash2.forEach(function(checkedHash){
-                            if(!hash1.find( function (checkedHash2) {
-                                    return checkedHash2 === checkedHash;
-                                }
-                                ))
-                                flag = false;
+                        let configHashTags = value.hashTags;
+                        let postHashTags = filterConfig.hashTags;
+                        let isTagsSetsEqual = true;
+                        postHashTags.forEach(function(checkedHash){
+                            if(photoPosts.indexOf(configHashTags) != -1) {
+                                isTagsSetsEqual = false;
+                            }
                         });
-                        return flag;
+                        return isTagsSetsEqual;
                     }
                 }
                 return true;
@@ -149,8 +147,8 @@ const POST_API = (function(){
             if (this.validatePhotoPost(photoPost) && !this.getPhotoPost(photoPost.id)) {
                 photoPost.visible = true;
                 photoPosts.push(photoPost);
-                photoPosts.sort(function(elem, b){
-                    return elem.createdAt - b.createdAt;
+                photoPosts.sort(function(a, b){
+                    return a.createdAt - b.createdAt;
                 });
                 return true;
             }
@@ -174,12 +172,15 @@ const POST_API = (function(){
                     else
                         temp[k] = post[k];
                 }
-                if (photoPost.description)
+                if (photoPost.description) {
                     temp.description = photoPost.description;
-                if (photoPost.photoLink)
+                }
+                if (photoPost.photoLink) {
                     temp.photoLink = photoPost.photoLink;
-                if (photoPost.hashTags && photoPost.hashTags.length > 0)
+                }
+                if (photoPost.hashTags && photoPost.hashTags.length > 0) {
                     temp.hashTags = photoPost.hashTags.slice();
+                }
                 if (this.validatePhotoPost(temp)) {
                     photoPosts.splice(ind, 1, temp);
                     return true;
@@ -191,9 +192,7 @@ const POST_API = (function(){
         },
 
         removePhotoPost: function (id) {
-            let post = photoPosts.find(function(element){
-                return element.id === id;
-            });
+            var post = POST_API.getPhotoPost(id);
                 if (post !== undefined) {
                     post.visible = false;
                     return true;
