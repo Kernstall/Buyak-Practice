@@ -1,7 +1,8 @@
-var feedList = document.getElementsByClassName("feedList")[0];
+const feedList = document.getElementsByClassName("feedList")[0];
+const postTemplate = document.getElementById('postTemplate');
 
 const POST_API = (function(){
-        var lastPostCounter = 0;
+        let lastPostCounter = 0;
 
         const photoPosts = [
             {
@@ -212,7 +213,7 @@ const POST_API = (function(){
                 hashTagAgregator.add(tag);
             })
         });
-        updateTagDataList()
+        updateTagDataList();
 
         photoPosts.sort((a, b)=> b.createdAt.getTime()-a.createdAt.getTime());
 
@@ -224,9 +225,15 @@ const POST_API = (function(){
         }
 
         function validatePhotoPost(photoPost) {
-            return photoPost && Object.keys(photoPost).length < 9 && typeof photoPost.id === "string" &&
-                typeof photoPost.description === "string" && photoPost.description.length < 200 && photoPost.createdAt instanceof Date &&
-                typeof photoPost.author === "string" && photoPost.author.length > 0 && typeof photoPost.photoLink === "string" && photoPost.photoLink.length > 0 ;
+            if(photoPost){
+                let isIdValid = typeof photoPost.id === "string";
+                let isDescriptionValid = typeof photoPost.description === "string" && photoPost.description.length < 200;
+                let isDateValid = photoPost.createdAt instanceof Date;
+                let isAuthorValid = typeof photoPost.author === "string" && photoPost.author.length > 0;
+                let isPhotoLinkValid = typeof photoPost.photoLink === "string" && photoPost.photoLink.length > 0 ;
+                return isIdValid && isDescriptionValid && isDateValid && isAuthorValid && isPhotoLinkValid;
+            }
+            return false;
         }
 
         function drawBackPostOnScreen(photoPost){
@@ -239,81 +246,43 @@ const POST_API = (function(){
 
         function assemblePhotoPost(photoPost){
             if( validatePhotoPost(photoPost)) {
-                var feedPost = document.createElement('section');
-                feedPost.setAttribute('class', 'postWrapper');
-                feedPost.setAttribute('id', photoPost.id);
-                var postInfo = document.createElement('div');
-                postInfo.setAttribute('class', 'posterInfo');
-                var ownerName = document.createElement('h5');
-                ownerName.setAttribute('class', 'posterName');
-                ownerName.textContent = photoPost.author;
-
-                var postTime = document.createElement('p');
-                postTime.setAttribute('class', 'postTime');
-                postTime.textContent = addZero(photoPost.createdAt.getHours()) + ':' + addZero(photoPost.createdAt.getMinutes());
-
-                var postBody = document.createElement('div');
-                postBody.setAttribute('class', 'postBodyHolder');
-
-                var picAndDescr = document.createElement('div');
-                picAndDescr.setAttribute('class', 'picAndDescrHolder');
-
-                var postImg = document.createElement('img');
-                postImg.setAttribute('class', 'postImg');
-                postImg.setAttribute('src', photoPost.photoLink);
-                var description = document.createElement('article');
-                description.setAttribute('class', 'postDescription');
-                description.textContent = photoPost.description;
-
-                var likePanel = document.createElement('div');
-                likePanel.setAttribute('class', 'likePanel');
-                var editMask = document.createElement('div');
-                editMask.setAttribute('class', 'editMask');
-                editMask.setAttribute('id', photoPost.id);
-                var removeMask = document.createElement('div');
-                removeMask.setAttribute('class', 'removeMask');
-                removeMask.setAttribute('id', photoPost.id);
-                var likeMask = document.createElement('div');
-                likeMask.setAttribute('onclick','POST_API.likePost(\'' + photoPost.id + '\')');
-                if(photoPost.likes.indexOf(username)!=-1){
+                let post = postTemplate.content.cloneNode(true);
+                post.querySelector('.postWrapper').setAttribute('id', photoPost.id);
+                post.querySelector('.postTime').textContent=photoPost.createdAt.toLocaleString();
+                post.querySelector('.posterName').textContent=photoPost.author;
+                post.querySelector('.postImg').setAttribute('src', photoPost.photoLink);
+                post.querySelector('.postDescription').textContent =photoPost.description;
+                let likeMask = post.querySelector('.likeMask');
+                if(photoPost.likes.indexOf(username)!==-1){
                     likeMask.setAttribute('class', 'likeMask liked');
-                }else{
-                    likeMask.setAttribute('class', 'likeMask');
                 }
-                likeMask.setAttribute('id', photoPost.id);
-                var likeCount = document.createElement('div');
-                likeCount.setAttribute('class', 'likeCount');
-                likeCount.textContent = photoPost.likes.length;
-                likePanel.appendChild(editMask);
-                likePanel.appendChild(removeMask);
-                likePanel.appendChild(likeMask);
-                likePanel.appendChild(likeCount);
+                likeMask.setAttribute('onclick','POST_API.likePost(\'' + photoPost.id + '\')');
+                post.querySelector('.editMask').setAttribute('id', photoPost.id);
 
-                var hashTagHolder = document.createElement('div');
-                hashTagHolder.setAttribute('class', 'hashTagHolder');
+                let removeMask = post.querySelector('.removeMask');
+                removeMask.setAttribute('id', photoPost.id);
+                let editMask = post.querySelector('.editMask');
+                editMask.setAttribute('id', photoPost.id);
+                if(username!==photoPost.author){
+                    removeMask.style='display: none;';
+                    editMask.style='display: none;';
+                }
+                post.querySelector('.likeCount').textContent=photoPost.likes.length;
+
+                let hashTagHolder = post.querySelector('.hashTagHolder');
                 photoPost.hashTags.forEach(function (tag) {
-                    var hashTag = document.createElement('div');
+                    let hashTag = document.createElement('div');
                     hashTag.setAttribute('class', 'hashTag');
                     hashTag.textContent = tag;
                     hashTagHolder.appendChild(hashTag);
                 });
 
-
-                postInfo.appendChild(postTime);
-                postInfo.appendChild(ownerName);
-                feedPost.appendChild(postInfo);
-                picAndDescr.appendChild(postImg);
-                picAndDescr.appendChild(description);
-                postBody.appendChild(picAndDescr);
-                feedPost.appendChild(postBody);
-                postBody.appendChild(likePanel);
-                feedPost.appendChild(hashTagHolder);
-                return feedPost;
+                return post;
             }
         }
 
         function drawList(postList){
-            for(var i=0; i < postList.length; ++i){
+            for(let i=0; i < postList.length; ++i){
                 drawBackPostOnScreen(postList[i]);
             }
             return postList;
@@ -362,12 +331,12 @@ const POST_API = (function(){
         }
 
         function updateTagDataList(){
-            var datalist = document.getElementById('tagOptions');
+            let datalist = document.getElementById('tagOptions');
             while(datalist.firstChild){
                 datalist.removeChild(datalist.firstChild);
             }
             hashTagAgregator.forEach(function (tag) {
-                var tagOption = document.createElement("option");
+                let tagOption = document.createElement("option");
                 tagOption.text = tag;
                 datalist.appendChild(tagOption);
             });
@@ -388,6 +357,9 @@ const POST_API = (function(){
                 photoPost.visible = true;
                 photoPosts.push(photoPost);
                 photoPosts.sort((a, b)=> b.createdAt.getTime()-a.createdAt.getTime());
+                if(photoPosts.indexOf(photoPost) < lastPostCounter){
+                    ++lastPostCounter;
+                }
                 photoPost.hashTags.forEach(function (tag) {
                     hashTagAgregator.add(tag);
                 });
@@ -401,16 +373,16 @@ const POST_API = (function(){
         editPhotoPost: function (id, photoPost) {
             let ind;
             let post = photoPosts.find(function(el, i){
-                if (el.id == id) {
+                if (el.id === id) {
                 ind = i;
                 return true;
             }
             return false;
         });
             if (post) {
-                var temp = {};
-                var onScreenPost = document.getElementById(id);
-                for (var k in post) {
+                let temp = {};
+                let onScreenPost = document.getElementById(id);
+                for (let k in post) {
                     if (Array.isArray(post[k]))
                         temp[k] = post[k].slice();
                     else
@@ -422,21 +394,15 @@ const POST_API = (function(){
                         onScreenPost.getElementsByClassName('postDescription')[0].textContent=photoPost.description;
                     }
                 }
-                if (photoPost.photoLink) {
-                    temp.photoLink = photoPost.photoLink;
-                    if(onScreenPost!==undefined){
-                        onScreenPost.getElementsByClassName('postImg')[0].setAttribute('src',photoPost.photoLink);
-                    }
-                }
                 if (photoPost.hashTags && photoPost.hashTags.length > 0) {
                     temp.hashTags = photoPost.hashTags.slice();
                     if(onScreenPost!==undefined){
-                        var hashTagHolder = onScreenPost.getElementsByClassName('hashTagHolder')[0];
+                        let hashTagHolder = onScreenPost.getElementsByClassName('hashTagHolder')[0];
                         while (hashTagHolder.firstChild) {
                             hashTagHolder.removeChild(hashTagHolder.firstChild);
                         }
-                        for(var k = 0; k<photoPost.hashTags.length; ++k){
-                            var tag = document.createElement('div');
+                        for(let k = 0; k<photoPost.hashTags.length; ++k){
+                            let tag = document.createElement('div');
                             tag.setAttribute('class','hashTag');
                             tag.textContent = photoPost.hashTags[k];
                             hashTagHolder.appendChild(tag);
@@ -444,10 +410,13 @@ const POST_API = (function(){
                     }
                 }
                 if (this.validatePhotoPost(temp)) {
-                    photoPost.hashTags.forEach(function (tag) {
-                        hashTagAgregator.add(tag);
-                    });
-                    updateTagDataList();
+                    if(photoPost.hashTags)
+                    {
+                        photoPost.hashTags.forEach(function (tag) {
+                            hashTagAgregator.add(tag);
+                        });
+                        updateTagDataList();
+                    }
                     photoPosts.splice(ind, 1, temp);
                     return true;
                 }
@@ -472,37 +441,37 @@ const POST_API = (function(){
         },
 
         loadMorePosts: function(postNum = 10, filterConfig){
-            var postList = getPhotoPosts(lastPostCounter, postNum, filterConfig);
-            lastPostCounter = postList.length;
+            let postList = getPhotoPosts(lastPostCounter, postNum, filterConfig);
+            lastPostCounter += postList.length;
             drawList(postList);
         },
         
         likePost: function (id) {
-            if(username == undefined){
+            if(username === undefined){
                 return;
             }
-            var likedPost = photoPosts.find(function(post){
+            let likedPost = photoPosts.find(function(post){
                 return post.id===id;
             });
-            if(likedPost!= undefined ){
-                var index = likedPost.likes.indexOf(username);
-                if(index!= -1){
+            if(likedPost!== undefined ){
+                let index = likedPost.likes.indexOf(username);
+                if(index!== -1){
                     likedPost.likes.splice(index);
                 }else{
                     likedPost.likes.push(username);
                 }
-                var likeMask = document.getElementById(id).getElementsByClassName('likeMask liked')[0];
-                var likeCount = document.getElementById(id).getElementsByClassName('likeCount')[0];
-                if(likeMask!=undefined) {
+                let likeMask = document.getElementById(id).getElementsByClassName('likeMask liked')[0];
+                let likeCount = document.getElementById(id).getElementsByClassName('likeCount')[0];
+                if(likeMask!==undefined) {
                     likeMask.setAttribute('class', 'likeMask');
-                    if(likeCount!=undefined) {
+                    if(likeCount!==undefined) {
                         likeCount.textContent = Number(likeCount.textContent)-1;
                     }
                 }else{
                     let likeMask = document.getElementById(id).getElementsByClassName('likeMask')[0];
-                    if(likeMask!=undefined){
+                    if(likeMask!==undefined){
                         likeMask.setAttribute('class', 'likeMask liked');
-                        if(likeCount!=undefined) {
+                        if(likeCount!==undefined) {
                             likeCount.textContent = Number(likeCount.textContent) + 1;
                         }
                     }
