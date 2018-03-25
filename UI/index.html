@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="stylesheet" type="text/css" href="styles/w3schools.css">
-    <link rel="stylesheet" type="text/css" href="styles/Star Trek LCARS-style Ghost buttons.css">
+    <link rel="stylesheet" type="text/css" href="styles/loginStyles.css">
     <script src="resources/hardcode.js" type="text/javascript" defer></script>
     <script src="resources/photoPostModule.js" type="text/javascript" defer></script>
+    <script src="resources/navManager.js" type="text/javascript" defer></script>
+    <script src="resources/onLoadStartup.js" type="text/javascript" defer></script>
     <script src="test/test.js" type="text/javascript" defer></script>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -29,6 +32,69 @@
             </div>
         </section>
     </template>
+    <template id="loginFormTemplate">
+        <form class="login-form" onsubmit=" return SPA_MANAGER.loginSubmitAction() ">
+            <h1 class="SignInLabel" >Sign In</h1>
+            <div class="form-group ">
+                <input type="text" name ="username" class="form-control" placeholder="Username " id="loginUsername" >
+            <i class="fa fa-user fa-login"></i>
+            </div>
+            <div class="form-group log-status">
+                <input type="password" name ="password" class="form-control" placeholder="Password" id="loginPassword">
+                <i class="fa fa-lock fa-login"></i>
+            </div>
+            <span class="wrongInput">Invalid Parameters</span>
+            <a class="lostPassword" href="#">Lost your password?</a>
+            <button class="loginButton">Log in</button>
+
+
+        </form>
+    </template>
+    <template id="feedAndFilterTemplate">
+        <div class="feedAndFilterHolder">
+
+            <main class="feedList">
+            </main>
+
+            <div class="filterPanel">
+                <div class="stickyFilterScroller">
+                    <form onsubmit="return onSubmitWrapper(this);">
+                        <div class="filter">
+                            <p class="filterProps">Filter properties:</p>
+                            <div class="inputHolder">
+                                <input class="inputField" type="text" name="usernameFilter" placeholder="Username">
+                                <label class="switch">
+                                    <input type="checkbox" id="usernameFilterCheckbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="inputHolder">
+                                <input type="date" name="dateFilter" class="inputField">
+                                <label class="switch">
+                                    <input type="checkbox" id="dateFilterCheckbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div class="inputHolder">
+                                <input id="tagInput" list="tagOptions" name="browser" class="inputField">
+                                <datalist id="tagOptions">
+                                </datalist>
+                            </div>
+
+                            <div class="filterHashTagContainer"></div>
+
+                            <button class="filterApplyButton">Apply Filter</button>
+
+                        </div>
+                    </form>
+                    <div class="filterButton" onclick="filterDispel()"></div>
+                </div>
+            </div>
+
+            <div class="loadMore"><h class = "loadMoreText" onclick="POST_API.loadMorePosts(5, filterConfig)">Load More</h></div>
+
+        </div>
+    </template>
 </head>
 <body>
     <header class="header">
@@ -36,75 +102,29 @@
             <div class="homeWrapper">
                 <a class="headerLink" href="#">
                     <div>
-                        <h3 class="homeH3">Home</h3>
+                        <h3 class="homeH3" onclick="SPA_MANAGER.toPostsAction()">Home</h3>
                     </div>
                 </a>
             </div>
             <div class="homeWrapper">
                 <a class="headerLink" href="#">
-                    <div>
-                        <img class="uploadPic" src="resources/upload.png">
-                    </div>
+                    <i class="fa fa-upload uploadPic"></i>
                 </a>
             </div>
             <div class="logOutWrapper">
                 <a class="headerLink" href="#">
                     <div>
-                        <h3 class="logOutH3">LogOut</h3>
+                        <h3 class="logOutH3" onclick="SPA_MANAGER.loginAction();">LogIn</h3>
                     </div>
                 </a>
             </div>
             <div class="userWrapper">
                 <div class="homeWrapper">
-                    <h3 class="logOutH3">Roman</h3>
+                    <h3 class="logOutH3">Guest</h3>
                 </div>
             </div>
         </nav>
     </header>
-
-    <div class="feedAndFilterHolder">
-
-        <main class="feedList">
-        </main>
-
-        <div class="filterPanel">
-            <div class="stickyFilterScroller">
-                <form onsubmit="return onSubmitWrapper(this);">
-                <div class="filter">
-                    <p class="filterProps">Filter properties:</p>
-                    <div class="inputHolder">
-                        <input class="inputField" type="text" name="usernameFilter" placeholder="Username">
-                        <label class="switch">
-                            <input type="checkbox" id="usernameFilterCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                    <div class="inputHolder">
-                        <input type="date" name="dateFilter" class="inputField">
-                        <label class="switch">
-                            <input type="checkbox" id="dateFilterCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                    <div class="inputHolder">
-                        <input id="tagInput" list="tagOptions" name="browser" class="inputField">
-                        <datalist id="tagOptions">
-                        </datalist>
-                    </div>
-
-                    <div class="filterHashTagContainer"></div>
-
-                    <button class=" ctrl-standard typ-subhed fx-sliderIn filterApplyButton">Apply Filter</button>
-
-                </div>
-                </form>
-                <div class="filterButton" onclick="filterDispel()"></div>
-            </div>
-        </div>
-
-        <div class="loadMore"><h class = "loadMoreText" onclick="POST_API.loadMorePosts(5, filterConfig)">Load More</h></div>
-
-    </div>
 
     <footer class="footer">
         <table class="footerTable">

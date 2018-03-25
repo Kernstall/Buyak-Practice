@@ -5,14 +5,21 @@ body{
     min-width: fit-content;
     background-color: mintcream;
 }
+.header, .footer{
+    background-color: #551111;
+}
+.homeH3, .logOutH3, .footerTable, .hashTag {
+    color: #fefac0;
+}
 img::selection {
     background: transparent;
 }
-.homeWrapper:hover{
-    background-color: #FF8C00;
+.homeWrapper:hover, .userWrapper:hover, .logOutWrapper:hover{
+    background-color: #aa2222;
 }
+
+
 .header{
-    background-color: firebrick;
     height: 50px;
     width: 100%;
     position: sticky;
@@ -39,24 +46,17 @@ img::selection {
     height: inherit;
     background-color: inherit;
 }
-.logOutWrapper:hover{
-    background-color: #FF8C00;
-}
 .userWrapper{
     float: right;
     width: fit-content;
     height: inherit;
     background-color: inherit;
 }
-.userWrapper:hover{
-    background-color: #FF8C00;
-}
 .homeH3{
 
     font-size: 20px;
     font-family: sans-serif;
     text-align: center;
-    color: #fefac0;
     margin: 0px;
     padding-top: 14px;
 }
@@ -65,7 +65,6 @@ img::selection {
     font-size: 20px;
     font-family: sans-serif;
     text-align: center;
-    color: #fefac0;
     margin: 0px;
     padding-top: 14px;
 }
@@ -75,9 +74,9 @@ img::selection {
     margin: 0px;
 }
 .uploadPic{
-    height: 50px;
-    width: 50px;
-    padding-left: 15px;
+    padding: 0 15px 0 15px;
+    font-size: 50px;
+    color: #fefac0;
 }
 
 .userAvatarPic{
@@ -86,7 +85,6 @@ img::selection {
     padding: 0 5px 0 5px;
 }
 .footer{
-    background-color: firebrick;
     height: 80px;
     width: 100%;
 }
@@ -94,11 +92,9 @@ img::selection {
     padding-top: 10px;
     padding-left: 15px;
     font-family: sans-serif;
-    font-size: 14px;
     height: 100%;
     width: 500px;
     margin: auto;
-    color: #ffffff;
 }
 .feedList{
     width: inherit;
@@ -109,7 +105,7 @@ img::selection {
 .postWrapper{
     width: 100%;
     height: fit-content;
-    border: 0px solid #898989;
+    border: 0px solid #353b48;
     border-bottom-width: 1px;
     padding-bottom: 5px;
     margin: 0px 0px 10px 0px;
@@ -136,7 +132,7 @@ h5.posterName{
 p.postTime{
     font-size: 10px;
     font-family: sans-serif;
-    color: #696969;
+    color: #353b48;
     display: inline-block;
     float: right;
     margin-right: 45px;
@@ -195,7 +191,7 @@ p.postTime{
     -webkit-mask-image: url(edit.png);
     width:36px;
     height:36px;
-    background-color: #696969;
+    background-color: #353b48;
     margin-bottom: 5px;
     float: top;
     position: absolute;
@@ -208,7 +204,7 @@ p.postTime{
     -webkit-mask-image: url(remove.png);
     width:36px;
     height:36px;
-    background-color: #696969;
+    background-color: #353b48;
     margin-bottom: 5px;
     position: absolute;
     top: 41px;
@@ -222,7 +218,7 @@ p.postTime{
 .hashTag{
     height: 20px;
     font-size: 16px;
-    background-color: cornflowerblue;
+    background-color: #40739e;
     border-radius: 8px;
     color: #fefac0;
     display: inline-block;
@@ -311,7 +307,7 @@ p.postTime{
     width: 300px;
     min-height: 400px;
     height: fit-content;
-    background-color: white;
+    background-color: #f5f6fa;
     border: black 1px solid;
     opacity: 0;
     display: none;
@@ -336,8 +332,23 @@ p.postTime{
     margin-left: 10px;
     font-size: 18px;
 }
-.filterApplyButton{
+.filterApplyButton {
     margin: 20px 0 15px 20px;
+     background: #551111;
+     width: 200px;
+     font-size: 16px;
+     height: 40px;
+     color: #fff;
+     text-decoration: none;
+     border: none;
+     border-radius: 4px;
+     box-shadow: 2px 2px #231f20;
+ }
+.filterApplyButton:hover {
+    box-shadow: 3px 3px #231f20;
+}
+.filterApplyButton:focus{
+    outline: none;
 }
 
 @media (min-width: 960px) {

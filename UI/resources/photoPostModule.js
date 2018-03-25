@@ -1,221 +1,234 @@
-const feedList = document.getElementsByClassName("feedList")[0];
+if(!localStorage.photoPosts){
+    localStorage.photoPosts = JSON.stringify([
+        {
+            id: '1',
+            visible: true,
+            description: 'Lorem ipsum dolor sit amet, consectetur.',
+            createdAt: new Date('2019-08-23T23:59:59'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/801x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen', 'Roman']
+        },
+        {
+            id: '2',
+            visible: true,
+            description: 'Cras vel erat ut nunc tincidunt vulputate ut eu ante.',
+            createdAt: new Date('2019-08-23T23:58:58'),
+            author: 'Alex C.',
+            photoLink: 'https://source.unsplash.com/random/799x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen', 'Roman']
+        },
+        {
+            id: '3',
+            visible: true,
+            description: 'Etiam ac facilisis arcu, ac fringilla lacus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;',
+            createdAt: new Date('2019-08-23T23:57:57'),
+            author: 'Alex B.',
+            photoLink: 'resources/Adam.jpg',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '4',
+            visible: true,
+            description: 'Donec sollicitudin, justo eu feugiat pulvinar, ipsum orci rhoncus magna, vitae tristique lorem felis a nunc.',
+            createdAt: new Date('2019-08-23T23:56:56'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/802x600',
+            hashTags: ['like4like', 'goodDay', 'happy'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '5',
+            visible: true,
+            description: 'Sed ac lorem nec ante suscipit molestie. In a mattis velit.',
+            createdAt: new Date('2019-08-23T23:55:55'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/803x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '6',
+            visible: true,
+            description: 'Sed ac lorem nec ante suscipit molestie. In a mattis velit.',
+            createdAt: new Date('2007-08-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/804x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '7',
+            visible: true,
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus nibh ac arcu tincidunt, vel consequat velit gravida. Ut malesuada libero varius, tincidunt ante eu, dignissim sapien. Morbi dapibus arcu magna, a efficitur quam tincidunt ut. Quisque at auctor orci. Phasellus vitae urna et metus faucibus congue. Cras molestie dui in blandit lobortis. Pellentesque quis sollicitudin enim. Pellentesque vitae libero tristique, gravida nisl ac, sagittis lectus. Cras et ornare justo.',
+            createdAt: new Date('2018-02-23T23:00:00'),
+            author: 'Ivan Ivanov',
+            photoLink: 'https://source.unsplash.com/random/805x600',
+            hashTags: ['HelloWorld'],
+            likes: []
+        },
+        {
+            id: '8',
+            visible: true,
+            description: 'Aenean sapien justo, tristique vitae tristique eu, elementum at magna. Integer tempor enim vel scelerisque viverra. Phasellus vulputate purus a convallis pulvinar. Aenean euismod commodo turpis ut porta.',
+            createdAt: new Date('2007-08-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/805x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '9',
+            visible: true,
+            description: 'Nulla facilisi. Aliquam diam lacus, fermentum eu porta eget, dapibus vitae nulla. ',
+            createdAt: new Date('2007-02-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/806x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '10',
+            visible: true,
+            description: 'Vestibulum tempus maximus nibh in faucibus. Vivamus finibus ac odio vitae scelerisque. Nunc maximus venenatis eros, at varius metus pulvinar vel. Duis gravida facilisis pretium.',
+            createdAt: new Date('2007-02-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/807x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '11',
+            visible: false,
+            description: 'Lorem ipsum dolor sit amet, consectetur.',
+            createdAt: new Date('2007-08-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/801x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '12',
+            visible: true,
+            description: 'Cras vel erat ut nunc tincidunt vulputate ut eu ante.',
+            createdAt: new Date('2008-08-23T23:00:00'),
+            author: 'Alex C.',
+            photoLink: 'https://source.unsplash.com/random/799x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '13',
+            visible: true,
+            description: 'Etiam ac facilisis arcu, ac fringilla lacus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;',
+            createdAt: new Date('2007-08-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'resources/Adam.jpg',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '14',
+            visible: true,
+            description: 'Donec sollicitudin, justo eu feugiat pulvinar, ipsum orci rhoncus magna, vitae tristique lorem felis a nunc.',
+            createdAt: new Date('2018-08-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/802x600',
+            hashTags: ['like4like', 'goodDay', 'happy'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '15',
+            visible: true,
+            description: 'Sed ac lorem nec ante suscipit molestie. In a mattis velit.',
+            createdAt: new Date('2007-08-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/803x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '16',
+            visible: true,
+            description: 'Sed ac lorem nec ante suscipit molestie. In a mattis velit.',
+            createdAt: new Date('2007-08-28T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/804x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '17',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus nibh ac arcu tincidunt, vel consequat velit gravida. Ut malesuada libero varius, tincidunt ante eu, dignissim sapien. Morbi dapibus arcu magna, a efficitur quam tincidunt ut. Quisque at auctor orci. Phasellus vitae urna et metus faucibus congue. Cras molestie dui in blandit lobortis. Pellentesque quis sollicitudin enim. Pellentesque vitae libero tristique, gravida nisl ac, sagittis lectus. Cras et ornare justo.',
+            createdAt: new Date('2018-02-23T23:00:00'),
+            author: 'Ivan Ivanov',
+            photoLink: 'https://source.unsplash.com/random/805x600',
+            hashTags: ['HelloWorld'],
+            likes: []
+        },
+        {
+            id: '18',
+            visible: true,
+            description: 'Aenean sapien justo, tristique vitae tristique eu, elementum at magna. Integer tempor enim vel scelerisque viverra. Phasellus vulputate purus a convallis pulvinar. Aenean euismod commodo turpis ut porta.',
+            createdAt: new Date('2007-08-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/805x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '19',
+            visible: true,
+            description: 'Nulla facilisi. Aliquam diam lacus, fermentum eu porta eget, dapibus vitae nulla. ',
+            createdAt: new Date('2007-02-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/806x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        },
+        {
+            id: '20',
+            visible: true,
+            description: 'Vestibulum tempus maximus nibh in faucibus. Vivamus finibus ac odio vitae scelerisque. Nunc maximus venenatis eros, at varius metus pulvinar vel. Duis gravida facilisis pretium.',
+            createdAt: new Date('2007-02-23T23:00:00'),
+            author: 'Alex B.',
+            photoLink: 'https://source.unsplash.com/random/807x600',
+            hashTags: ['like4like'],
+            likes: ['Ivan', 'Semen']
+        }
+    ]);
+}
+let feedList = document.getElementsByClassName("feedList")[0];
 const postTemplate = document.getElementById('postTemplate');
 
 const POST_API = (function(){
+
         let lastPostCounter = 0;
 
-        const photoPosts = [
-            {
-                id: '1',
-                visible: true,
-                description: 'Lorem ipsum dolor sit amet, consectetur.',
-                createdAt: new Date('2019-08-23T23:59:59'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/801x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen', 'Roman']
-            },
-            {
-                id: '2',
-                visible: true,
-                description: 'Cras vel erat ut nunc tincidunt vulputate ut eu ante.',
-                createdAt: new Date('2019-08-23T23:58:58'),
-                author: 'Alex C.',
-                photoLink: 'https://source.unsplash.com/random/799x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen', 'Roman']
-            },
-            {
-                id: '3',
-                visible: true,
-                description: 'Etiam ac facilisis arcu, ac fringilla lacus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;',
-                createdAt: new Date('2019-08-23T23:57:57'),
-                author: 'Alex B.',
-                photoLink: 'resources/Adam.jpg',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '4',
-                visible: true,
-                description: 'Donec sollicitudin, justo eu feugiat pulvinar, ipsum orci rhoncus magna, vitae tristique lorem felis a nunc.',
-                createdAt: new Date('2019-08-23T23:56:56'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/802x600',
-                hashTags: ['like4like', 'goodDay', 'happy'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '5',
-                visible: true,
-                description: 'Sed ac lorem nec ante suscipit molestie. In a mattis velit.',
-                createdAt: new Date('2019-08-23T23:55:55'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/803x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '6',
-                visible: true,
-                description: 'Sed ac lorem nec ante suscipit molestie. In a mattis velit.',
-                createdAt: new Date('2007-08-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/804x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '7',
-                visible: true,
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus nibh ac arcu tincidunt, vel consequat velit gravida. Ut malesuada libero varius, tincidunt ante eu, dignissim sapien. Morbi dapibus arcu magna, a efficitur quam tincidunt ut. Quisque at auctor orci. Phasellus vitae urna et metus faucibus congue. Cras molestie dui in blandit lobortis. Pellentesque quis sollicitudin enim. Pellentesque vitae libero tristique, gravida nisl ac, sagittis lectus. Cras et ornare justo.',
-                createdAt: new Date('2018-02-23T23:00:00'),
-                author: 'Ivan Ivanov',
-                photoLink: 'https://source.unsplash.com/random/805x600',
-                hashTags: ['HelloWorld'],
-                likes: []
-            },
-            {
-                id: '8',
-                visible: true,
-                description: 'Aenean sapien justo, tristique vitae tristique eu, elementum at magna. Integer tempor enim vel scelerisque viverra. Phasellus vulputate purus a convallis pulvinar. Aenean euismod commodo turpis ut porta.',
-                createdAt: new Date('2007-08-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/805x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '9',
-                visible: true,
-                description: 'Nulla facilisi. Aliquam diam lacus, fermentum eu porta eget, dapibus vitae nulla. ',
-                createdAt: new Date('2007-02-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/806x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '10',
-                visible: true,
-                description: 'Vestibulum tempus maximus nibh in faucibus. Vivamus finibus ac odio vitae scelerisque. Nunc maximus venenatis eros, at varius metus pulvinar vel. Duis gravida facilisis pretium.',
-                createdAt: new Date('2007-02-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/807x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '11',
-                visible: false,
-                description: 'Lorem ipsum dolor sit amet, consectetur.',
-                createdAt: new Date('2007-08-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/801x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '12',
-                visible: true,
-                description: 'Cras vel erat ut nunc tincidunt vulputate ut eu ante.',
-                createdAt: new Date('2008-08-23T23:00:00'),
-                author: 'Alex C.',
-                photoLink: 'https://source.unsplash.com/random/799x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '13',
-                visible: true,
-                description: 'Etiam ac facilisis arcu, ac fringilla lacus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;',
-                createdAt: new Date('2007-08-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'resources/Adam.jpg',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '14',
-                visible: true,
-                description: 'Donec sollicitudin, justo eu feugiat pulvinar, ipsum orci rhoncus magna, vitae tristique lorem felis a nunc.',
-                createdAt: new Date('2018-08-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/802x600',
-                hashTags: ['like4like', 'goodDay', 'happy'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '15',
-                visible: true,
-                description: 'Sed ac lorem nec ante suscipit molestie. In a mattis velit.',
-                createdAt: new Date('2007-08-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/803x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '16',
-                visible: true,
-                description: 'Sed ac lorem nec ante suscipit molestie. In a mattis velit.',
-                createdAt: new Date('2007-08-28T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/804x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '17',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus nibh ac arcu tincidunt, vel consequat velit gravida. Ut malesuada libero varius, tincidunt ante eu, dignissim sapien. Morbi dapibus arcu magna, a efficitur quam tincidunt ut. Quisque at auctor orci. Phasellus vitae urna et metus faucibus congue. Cras molestie dui in blandit lobortis. Pellentesque quis sollicitudin enim. Pellentesque vitae libero tristique, gravida nisl ac, sagittis lectus. Cras et ornare justo.',
-                createdAt: new Date('2018-02-23T23:00:00'),
-                author: 'Ivan Ivanov',
-                photoLink: 'https://source.unsplash.com/random/805x600',
-                hashTags: ['HelloWorld'],
-                likes: []
-            },
-            {
-                id: '18',
-                visible: true,
-                description: 'Aenean sapien justo, tristique vitae tristique eu, elementum at magna. Integer tempor enim vel scelerisque viverra. Phasellus vulputate purus a convallis pulvinar. Aenean euismod commodo turpis ut porta.',
-                createdAt: new Date('2007-08-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/805x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '19',
-                visible: true,
-                description: 'Nulla facilisi. Aliquam diam lacus, fermentum eu porta eget, dapibus vitae nulla. ',
-                createdAt: new Date('2007-02-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/806x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            },
-            {
-                id: '20',
-                visible: true,
-                description: 'Vestibulum tempus maximus nibh in faucibus. Vivamus finibus ac odio vitae scelerisque. Nunc maximus venenatis eros, at varius metus pulvinar vel. Duis gravida facilisis pretium.',
-                createdAt: new Date('2007-02-23T23:00:00'),
-                author: 'Alex B.',
-                photoLink: 'https://source.unsplash.com/random/807x600',
-                hashTags: ['like4like'],
-                likes: ['Ivan', 'Semen']
-            }
-        ];
+        const photoPosts = getFromLocalStorage();
 
         const hashTagAgregator = new Set([]);
 
-        photoPosts.forEach(function (photoPost) {
-            photoPost.hashTags.forEach(function (tag) {
-                hashTagAgregator.add(tag);
-            })
-        });
-        updateTagDataList();
-
         photoPosts.sort((a, b)=> b.createdAt.getTime()-a.createdAt.getTime());
+
+        window.addEventListener("beforeunload", function (event) {
+            setToLocalStorage();
+        });
+
+        function getFromLocalStorage(){
+            let posts = JSON.parse(localStorage.photoPosts);
+            posts.forEach( function(post){
+                post.createdAt = new Date(post.createdAt);
+            });
+            return posts;
+        }
+
+        function setToLocalStorage(){
+            localStorage.photoPosts = JSON.stringify(photoPosts);
+        }
 
         function addZero(i) { //for date-formating purpose
             if (i < 10) {
@@ -324,6 +337,7 @@ const POST_API = (function(){
         }
 
         function redraw(number, filterConfig){
+            feedList = document.getElementsByClassName("feedList")[0];
             while(feedList.firstChild){
                 feedList.removeChild(feedList.firstChild);
             }
@@ -447,7 +461,7 @@ const POST_API = (function(){
         },
         
         likePost: function (id) {
-            if(username === undefined){
+            if(username === undefined || username === ''){
                 return;
             }
             let likedPost = photoPosts.find(function(post){
@@ -481,9 +495,15 @@ const POST_API = (function(){
 
         applyFilterAndRedraw: function (filterConfig) {
             redraw(lastPostCounter, filterConfig);
-        }
+        },
+
+        updateFilterHashTagHints: function () {
+            photoPosts.forEach(function (photoPost) {
+                photoPost.hashTags.forEach(function (tag) {
+                    hashTagAgregator.add(tag);
+                })
+            });
+            updateTagDataList();
         }
     }
-)();
-
-POST_API.loadMorePosts(5, filterConfig);
+})();
