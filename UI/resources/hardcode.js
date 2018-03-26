@@ -42,6 +42,9 @@ let tagFilterHolder = document.getElementsByClassName('filterHashTagContainer')[
 function removeMyTag(id){
     tagFilterHolder.removeChild(document.getElementById(id).parentNode);
 }
+function removeTagFromContainer(node){
+    node.parentNode.parentNode.removeChild(node.parentNode);
+}
 
 function assembleFilterConfig(inputForm){
 
@@ -82,11 +85,17 @@ function filterDispel(){
     let display = filter.style.opacity;
 
     if(display == 0){
-        filter.style.opacity =1;
-        filter.style.display ="inherit";
+        filter.classList.remove('fade');
+        setTimeout(function () {
+            if(display ==0)
+                filter.style.opacity =1;
+        }, 0);
     }
     else{
         filter.style.opacity =0;
-        filter.style.display ="none";
+        setTimeout(function () {
+            if(filter.style.opacity ==0)
+                filter.classList.add('fade');
+        }, 750)
     }
 }

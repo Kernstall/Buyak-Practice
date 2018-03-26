@@ -3,7 +3,7 @@ body{
     min-height: 100%;
     margin: 0;
     min-width: fit-content;
-    background-color: mintcream;
+    background-color: #edeef0;
 }
 .header, .footer{
     background-color: #551111;
@@ -103,12 +103,12 @@ img::selection {
     display: table-cell;
 }
 .postWrapper{
+    background-color: #f9f9f9;
     width: 100%;
     height: fit-content;
-    border: 0px solid #353b48;
-    border-bottom-width: 1px;
     padding-bottom: 5px;
     margin: 0px 0px 10px 0px;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2), 0 3px 2px 0 rgba(0, 0, 0, 0.24);
 }
 .postWrapper::selection {
     background: transparent;
@@ -284,9 +284,10 @@ p.postTime{
 }
 .feedAndFilterHolder{
     margin: auto;
-    width: 500px;
+    width: 505px;
     padding-bottom: 7px;
     min-height: 100vh;
+    height: fit-content;
 }
 .filterPanel{
     margin-right: 40px;
@@ -303,15 +304,17 @@ p.postTime{
 
 .filter{
     position: absolute;
-    right: 0px;
+    right: 0;
     width: 300px;
     min-height: 400px;
     height: fit-content;
-    background-color: #f5f6fa;
+    background-color: #f9f9f9;
     border: black 1px solid;
     opacity: 0;
+    transition: opacity 0.75s ease-out;
+}
+.fade{
     display: none;
-    transition: opacity 0.5s ease-out;
 }
 .inputHolder{
     margin: 50px 0px 0px 20px;
@@ -329,8 +332,9 @@ p.postTime{
     padding-left: 10px;
 }
 .filterProps{
-    margin-left: 10px;
-    font-size: 18px;
+    margin-left: 15px;
+    color: #231f20;
+    font-size: 27px;
 }
 .filterApplyButton {
     margin: 20px 0 15px 20px;
@@ -357,7 +361,7 @@ p.postTime{
         min-width: 850px;
     }
     .feedAndFilterHolder{
-        width: 850px;
+        width: 855px;
     }
     .footerTable{
         width: 850px;
@@ -366,7 +370,13 @@ p.postTime{
         width: 780px;
     }
     .postImg{
-        width: 720px;
+        width: 760px;
     }
 
+}
+@keyframes fade {
+     100% {display: none;}
+ }
+@keyframes show {
+    100% {display: none;}
 }

@@ -274,6 +274,7 @@ const POST_API = (function(){
 
                 let removeMask = post.querySelector('.removeMask');
                 removeMask.setAttribute('id', photoPost.id);
+                removeMask.setAttribute('onclick', 'POST_API.removePhotoPost(\"'+photoPost.id+'\");');
                 let editMask = post.querySelector('.editMask');
                 editMask.setAttribute('id', photoPost.id);
                 if(username!==photoPost.author){
@@ -338,10 +339,12 @@ const POST_API = (function(){
 
         function redraw(number, filterConfig){
             feedList = document.getElementsByClassName("feedList")[0];
-            while(feedList.firstChild){
-                feedList.removeChild(feedList.firstChild);
+            if(feedList){
+                while(feedList.firstChild){
+                    feedList.removeChild(feedList.firstChild);
+                }
+                drawList(getPhotoPosts(0, number, filterConfig));
             }
-            drawList(getPhotoPosts(0, number, filterConfig));
         }
 
         function updateTagDataList(){
@@ -443,12 +446,13 @@ const POST_API = (function(){
         removePhotoPost: function (id) {
             var post = POST_API.getPhotoPost(id);
                 if (post !== undefined) {
-                    var onScreenPost = document.getElementById(id);
-                    if(onScreenPost!=undefined){
-                        feedList.removeChild(onScreenPost);
-                        lastPostCounter --;
-                    }
+                    //var onScreenPost = document.getElementById(id);
+                    //if(onScreenPost!=undefined){
+                    //    feedList.removeChild(onScreenPost);
+                    //    lastPostCounter --;
+                    //}
                     post.visible = false;
+                    POST_API.applyFilterAndRedraw();
                     return true;
             }
             return false;
