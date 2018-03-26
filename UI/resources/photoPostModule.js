@@ -277,6 +277,7 @@ const POST_API = (function(){
                 removeMask.setAttribute('onclick', 'POST_API.removePhotoPost(\"'+photoPost.id+'\");');
                 let editMask = post.querySelector('.editMask');
                 editMask.setAttribute('id', photoPost.id);
+                editMask.setAttribute('onclick', 'SPA_MANAGER.toEditPost(\"'+photoPost.id+'\");');
                 if(username!==photoPost.author){
                     removeMask.style='display: none;';
                     editMask.style='display: none;';
@@ -398,7 +399,6 @@ const POST_API = (function(){
         });
             if (post) {
                 let temp = {};
-                let onScreenPost = document.getElementById(id);
                 for (let k in post) {
                     if (Array.isArray(post[k]))
                         temp[k] = post[k].slice();
@@ -407,24 +407,9 @@ const POST_API = (function(){
                 }
                 if (photoPost.description) {
                     temp.description = photoPost.description;
-                    if(onScreenPost!==undefined){
-                        onScreenPost.getElementsByClassName('postDescription')[0].textContent=photoPost.description;
-                    }
                 }
                 if (photoPost.hashTags && photoPost.hashTags.length > 0) {
                     temp.hashTags = photoPost.hashTags.slice();
-                    if(onScreenPost!==undefined){
-                        let hashTagHolder = onScreenPost.getElementsByClassName('hashTagHolder')[0];
-                        while (hashTagHolder.firstChild) {
-                            hashTagHolder.removeChild(hashTagHolder.firstChild);
-                        }
-                        for(let k = 0; k<photoPost.hashTags.length; ++k){
-                            let tag = document.createElement('div');
-                            tag.setAttribute('class','hashTag');
-                            tag.textContent = photoPost.hashTags[k];
-                            hashTagHolder.appendChild(tag);
-                        }
-                    }
                 }
                 if (this.validatePhotoPost(temp)) {
                     if(photoPost.hashTags)
@@ -435,6 +420,7 @@ const POST_API = (function(){
                         updateTagDataList();
                     }
                     photoPosts.splice(ind, 1, temp);
+                    POST_API.applyFilterAndRedraw();
                     return true;
                 }
                 else
