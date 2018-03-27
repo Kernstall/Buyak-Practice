@@ -3,16 +3,23 @@ body{
     min-height: 100%;
     margin: 0;
     min-width: fit-content;
-    background-color: mintcream;
+    background-color: #edeef0;
+}
+.header, .footer{
+    background-color: #551111;
+}
+.homeH3, .logOutH3, .footerTable, .hashTag {
+    color: #fefac0;
 }
 img::selection {
     background: transparent;
 }
-.homeWrapper:hover{
-    background-color: #FF8C00;
+.homeWrapper:hover, .userWrapper:hover, .logOutWrapper:hover{
+    background-color: #aa2222;
 }
+
+
 .header{
-    background-color: firebrick;
     height: 50px;
     width: 100%;
     position: sticky;
@@ -39,24 +46,17 @@ img::selection {
     height: inherit;
     background-color: inherit;
 }
-.logOutWrapper:hover{
-    background-color: #FF8C00;
-}
 .userWrapper{
     float: right;
     width: fit-content;
     height: inherit;
     background-color: inherit;
 }
-.userWrapper:hover{
-    background-color: #FF8C00;
-}
 .homeH3{
 
     font-size: 20px;
     font-family: sans-serif;
     text-align: center;
-    color: #fefac0;
     margin: 0px;
     padding-top: 14px;
 }
@@ -65,7 +65,6 @@ img::selection {
     font-size: 20px;
     font-family: sans-serif;
     text-align: center;
-    color: #fefac0;
     margin: 0px;
     padding-top: 14px;
 }
@@ -75,9 +74,9 @@ img::selection {
     margin: 0px;
 }
 .uploadPic{
-    height: 50px;
-    width: 50px;
-    padding-left: 15px;
+    padding: 0 15px 0 15px;
+    font-size: 50px;
+    color: #fefac0;
 }
 
 .userAvatarPic{
@@ -86,7 +85,6 @@ img::selection {
     padding: 0 5px 0 5px;
 }
 .footer{
-    background-color: firebrick;
     height: 80px;
     width: 100%;
 }
@@ -94,11 +92,9 @@ img::selection {
     padding-top: 10px;
     padding-left: 15px;
     font-family: sans-serif;
-    font-size: 14px;
     height: 100%;
     width: 500px;
     margin: auto;
-    color: #ffffff;
 }
 .feedList{
     width: inherit;
@@ -107,12 +103,12 @@ img::selection {
     display: table-cell;
 }
 .postWrapper{
+    background-color: #f9f9f9;
     width: 100%;
     height: fit-content;
-    border: 0px solid #898989;
-    border-bottom-width: 1px;
     padding-bottom: 5px;
     margin: 0px 0px 10px 0px;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2), 0 3px 2px 0 rgba(0, 0, 0, 0.24);
 }
 .postWrapper::selection {
     background: transparent;
@@ -136,7 +132,7 @@ h5.posterName{
 p.postTime{
     font-size: 10px;
     font-family: sans-serif;
-    color: #696969;
+    color: #353b48;
     display: inline-block;
     float: right;
     margin-right: 45px;
@@ -195,7 +191,7 @@ p.postTime{
     -webkit-mask-image: url(edit.png);
     width:36px;
     height:36px;
-    background-color: #696969;
+    background-color: #353b48;
     margin-bottom: 5px;
     float: top;
     position: absolute;
@@ -208,7 +204,7 @@ p.postTime{
     -webkit-mask-image: url(remove.png);
     width:36px;
     height:36px;
-    background-color: #696969;
+    background-color: #353b48;
     margin-bottom: 5px;
     position: absolute;
     top: 41px;
@@ -222,7 +218,7 @@ p.postTime{
 .hashTag{
     height: 20px;
     font-size: 16px;
-    background-color: cornflowerblue;
+    background-color: #40739e;
     border-radius: 8px;
     color: #fefac0;
     display: inline-block;
@@ -288,9 +284,10 @@ p.postTime{
 }
 .feedAndFilterHolder{
     margin: auto;
-    width: 500px;
+    width: 505px;
     padding-bottom: 7px;
     min-height: 100vh;
+    height: fit-content;
 }
 .filterPanel{
     margin-right: 40px;
@@ -307,15 +304,17 @@ p.postTime{
 
 .filter{
     position: absolute;
-    right: 0px;
+    right: 0;
     width: 300px;
     min-height: 400px;
     height: fit-content;
-    background-color: white;
+    background-color: #f9f9f9;
     border: black 1px solid;
     opacity: 0;
+    transition: opacity 0.75s ease-out;
+}
+.fade{
     display: none;
-    transition: opacity 0.5s ease-out;
 }
 .inputHolder{
     margin: 50px 0px 0px 20px;
@@ -333,11 +332,27 @@ p.postTime{
     padding-left: 10px;
 }
 .filterProps{
-    margin-left: 10px;
-    font-size: 18px;
+    margin-left: 15px;
+    color: #231f20;
+    font-size: 27px;
 }
-.filterApplyButton{
+.filterApplyButton {
     margin: 20px 0 15px 20px;
+     background: #551111;
+     width: 200px;
+     font-size: 16px;
+     height: 40px;
+     color: #fff;
+     text-decoration: none;
+     border: none;
+     border-radius: 4px;
+     box-shadow: 2px 2px #231f20;
+ }
+.filterApplyButton:hover {
+    box-shadow: 3px 3px #231f20;
+}
+.filterApplyButton:focus{
+    outline: none;
 }
 
 @media (min-width: 960px) {
@@ -346,7 +361,7 @@ p.postTime{
         min-width: 850px;
     }
     .feedAndFilterHolder{
-        width: 850px;
+        width: 855px;
     }
     .footerTable{
         width: 850px;
@@ -355,7 +370,13 @@ p.postTime{
         width: 780px;
     }
     .postImg{
-        width: 720px;
+        width: 760px;
     }
 
+}
+@keyframes fade {
+     100% {display: none;}
+ }
+@keyframes show {
+    100% {display: none;}
 }

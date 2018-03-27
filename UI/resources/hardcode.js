@@ -1,65 +1,50 @@
+if (!localStorage.username){
+    localStorage.username = "Alex B.";
+}
+let username = localStorage.username;
 
-const username ="Alex B.";
+let filterConfig = new Object();
 
-(function() {
+function updateHeader() {
     let headers = document.getElementsByClassName('logOutH3');
     let signInText = headers[0];
     let guestText = headers[1];
     if (username === '') {
         signInText.textContent = 'Sign in';
         guestText.textContent = 'Guest';
+        document.getElementsByClassName('userWrapper')[0].removeChild( document.getElementsByClassName('userAvatarWrapper')[0]);
     } else {
         signInText.textContent = ' Log Out';
         guestText.textContent = username;
-        let avatarWrapper = document.createElement('div');
-        avatarWrapper.setAttribute('class', 'userAvatarWrapper');
-        let div = document.createElement('div');
 
-        let avatar = document.createElement('img');
-        avatar.setAttribute('class', 'userAvatarPic');
-        avatar.setAttribute('src', 'resources/avatar.png');
-
-        div.appendChild(avatar);
-        avatarWrapper.appendChild(div);
         let userWrapper = document.getElementsByClassName('userWrapper')[0];
-        userWrapper.insertBefore(avatarWrapper, userWrapper.firstChild );
+
+        if(!userWrapper.querySelector('.userAvatarWrapper')){
+            let avatarWrapper = document.createElement('div');
+            avatarWrapper.setAttribute('class', 'userAvatarWrapper');
+            let div = document.createElement('div');
+            let avatar = document.createElement('img');
+            avatar.setAttribute('class', 'userAvatarPic');
+            avatar.setAttribute('src', 'resources/avatar.png');
+
+            avatarWrapper.appendChild(div);
+            userWrapper.insertBefore(avatarWrapper, userWrapper.firstChild );
+
+            div.appendChild(avatar);
+        }
+
     }
-})();
-const tagFilterHolder = document.getElementsByClassName('filterHashTagContainer')[0];
-let filterConfig = new Object();
+}
+updateHeader();
+
+let tagFilterHolder = document.getElementsByClassName('filterHashTagContainer')[0];
 
 function removeMyTag(id){
     tagFilterHolder.removeChild(document.getElementById(id).parentNode);
 }
-
-let tagIdCounter = 0;
-(function() {
-    let tagInput = document.getElementById('tagInput');
-    tagInput.addEventListener('keypress', function (event) {
-        if(event.charCode === 13){
-            event.preventDefault();
-            if(tagInput.value!==''){
-                let checkTagInContainer = Array.from(tagFilterHolder.childNodes).find(function(element){
-                    return element.textContent === tagInput.value;
-                });
-
-                if(checkTagInContainer === undefined){
-                    let hashTag = document.createElement('div');
-                    hashTag.setAttribute('class', 'hashTag');
-                    hashTag.textContent = tagInput.value;
-                    let tagCancel = document.createElement('div');
-                    tagCancel.setAttribute('class', 'cancelMask');
-                    tagCancel.setAttribute('id', 'cancelTag'+tagIdCounter);
-                    tagCancel.setAttribute('onclick', 'removeMyTag(\''+'cancelTag'+tagIdCounter++ +'\')');
-                    hashTag.appendChild(tagCancel);
-                    tagFilterHolder.appendChild(hashTag);
-                }else{
-                    alert('You already added this tag into filter');
-                }
-            }
-        }
-    } )
-}());
+function removeTagFromContainer(node){
+    node.parentNode.parentNode.removeChild(node.parentNode);
+}
 
 function assembleFilterConfig(inputForm){
 
@@ -100,11 +85,17 @@ function filterDispel(){
     let display = filter.style.opacity;
 
     if(display == 0){
-        filter.style.opacity =1;
-        filter.style.display ="inherit";
+        filter.classList.remove('fade');
+        setTimeout(function () {
+            if(display ==0)
+                filter.style.opacity =1;
+        }, 0);
     }
     else{
         filter.style.opacity =0;
-        filter.style.display ="none";
+        setTimeout(function () {
+            if(filter.style.opacity ==0)
+                filter.classList.add('fade');
+        }, 750)
     }
 }
