@@ -1,4 +1,6 @@
 body{
+    height: 100%;
+    min-height: 100%;
     margin: 0;
     min-width: fit-content;
     background-color: mintcream;
@@ -42,7 +44,7 @@ img::selection {
 }
 .userWrapper{
     float: right;
-    width: 160px;
+    width: fit-content;
     height: inherit;
     background-color: inherit;
 }
@@ -81,7 +83,7 @@ img::selection {
 .userAvatarPic{
     height: 50px;
     width: 50px;
-    padding: 0px 5px 0px 5px;
+    padding: 0 5px 0 5px;
 }
 .footer{
     background-color: firebrick;
@@ -155,10 +157,39 @@ p.postTime{
     background-color: black;
     position: absolute;
     bottom: 25px;
-
+    text-align: center;
+    font-size: 20px;
+}
+.cancelMask{
+    -webkit-mask-image: url(cancelSmall.png);
+    width:12px;
+    height:12px;
+    background-color: white;
+    display: inline-block;
+    margin: 0 0 0 2px;
+}
+.cancelMask:hover{
+    background-color: black;
+}
+.likeCount {
+    width:36px;
+    height:36px;
+    position: absolute;
+    bottom: 61px;
+    text-align: center;
+    font-size: 20px;
+}
+.likeCount::selection {
+    background: transparent;
+}
+.liked{
+    background-color: #B22222;
 }
 .likeMask:hover{
     background-color: #B22222;
+}
+.liked:hover{
+    background-color: black;
 }
 .editMask {
     -webkit-mask-image: url(edit.png);
@@ -196,7 +227,8 @@ p.postTime{
     color: #fefac0;
     display: inline-block;
     padding: 0px 5px 0px 5px;
-    margin-bottom: 1px;
+    margin: 0px 3px 1px 2px;
+    width: fit-content;
 }
 .hashTagHolder{
 }
@@ -217,21 +249,26 @@ p.postTime{
     margin: auto;
     height: inherit;
 }
-
-.loadMore{
-    margin: auto;
-    margin-bottom: 10px;
-    background-color: dimgrey;
-    width: 90px;
-    height: 20px;
-    border-radius: 8px;
-    color: #fefac0;
+.loadMoreText{
     text-align: center;
+    display: block;
+}
+.loadMore{
+    display: block;
+    margin: auto;
+    width: 300px;
+    background-color: dimgrey;
+    border-radius: 1px;
+    height: 20px;
+    color: #fefac0;
+}
+.filterHashTagContainer{
+    margin: 20px 0px 0px 15px;
 }
 .loadMore:hover{
     background-color: black;
 }
-.loadMore::selection {
+.loadMoreText::selection {
     background: transparent;
 }
 .filterButton{
@@ -252,6 +289,8 @@ p.postTime{
 .feedAndFilterHolder{
     margin: auto;
     width: 500px;
+    padding-bottom: 7px;
+    min-height: 100vh;
 }
 .filterPanel{
     margin-right: 40px;
@@ -270,7 +309,8 @@ p.postTime{
     position: absolute;
     right: 0px;
     width: 300px;
-    height: 430px;
+    min-height: 400px;
+    height: fit-content;
     background-color: white;
     border: black 1px solid;
     opacity: 0;
@@ -295,6 +335,9 @@ p.postTime{
 .filterProps{
     margin-left: 10px;
     font-size: 18px;
+}
+.filterApplyButton{
+    margin: 20px 0 15px 20px;
 }
 
 @media (min-width: 960px) {

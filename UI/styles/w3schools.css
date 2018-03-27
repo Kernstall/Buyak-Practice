@@ -85,3 +85,5 @@ input:checked + .slider:before {
 .select-editable select:focus, .select-editable input:focus {
     outline:none;
 }
+
+
