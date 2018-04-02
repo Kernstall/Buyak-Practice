@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Kernstall/Buyak-Practice/issues"
   },
-  "homepage": "https://github.com/Kernstall/Buyak-Practice#readme"
+  "homepage": "https://github.com/Kernstall/Buyak-Practice#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
 }
