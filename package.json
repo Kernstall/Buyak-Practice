@@ -1,0 +1,20 @@
+{
+  "name": "repo",
+  "version": "1.0.0",
+  "description": "An Instagram-like webApp project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kernstall/Buyak-Practice.git"
+  },
+  "author": "Raman Buyak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kernstall/Buyak-Practice/issues"
+  },
+  "homepage": "https://github.com/Kernstall/Buyak-Practice#readme"
+}
