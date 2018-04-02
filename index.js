@@ -24,18 +24,6 @@ function addPhotoPost(photoPost){
     fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts) );
 }
 
-function removePhotoPost(id){
-    let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
-    photoPosts.find(function (element) {
-        if(element.id === id){
-            element.visible = false;
-            return true;
-        }
-        return false;
-    });
-    fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts) );
-}
-
 function editPhotoPost (id, photoPost) {
     let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
     let ind;
@@ -96,7 +84,7 @@ app.post('/add',function (req, res) {
     }
 });
 
-app.post('/edit', function (req, res) {
+app.put('/edit', function (req, res) {
     let result = editPhotoPost(req.body.id, req.body);
     if(result){
         res.end('ok');
@@ -105,8 +93,71 @@ app.post('/edit', function (req, res) {
     }
 });
 
-app.put('/', function (req, res) {
+app.put('/remove', function (req, res) {
+    let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
+    let postIndex = photoPosts.findIndex(function (element) {
+        if(element.id===req.body.id) {
+            return true;
+        }
+        return false;
 
+    });
+
+    if(postIndex!==-1){
+        photoPosts[postIndex].visible = false;
+        res.end('ok');
+        fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts) );
+    }else{
+        res.end('fail');
+    }
+});
+
+app.put('/load', function (req, res) {
+    let skip, top;
+    if(req.body.skip){
+        skip = req.body.skip;
+    }else{
+        skip = 0;
+    }
+    if(req.body.top){
+        top = req.body.top;
+    }else{
+        top = 10;
+    }
+    let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
+    let sentPosts =photoPosts.filter((function (value) {
+        if(!validatePhotoPost(value)){
+            return false;
+        }
+        if(value.visible===false){
+            return false;
+        }
+        if (req.body.filterConfig) {
+
+            if (req.body.filterConfig.author && value.author !== req.body.filterConfig.author) {
+                return false;
+            }
+            if (req.body.filterConfig.createdAt) {
+                let firstDate = value.createdAt;
+                let secondDate = req.body.filterConfig.createdAt;
+                if (!(firstDate.getDate() === secondDate.getDate() && firstDate.getFullYear() === secondDate.getFullYear() && firstDate.getMonth() === secondDate.getMonth()))
+                    return false;
+            }
+            if (req.body.filterConfig.hashTags) {
+                let postHashTags = value.hashTags;
+                let configHashTags = req.body.filterConfig.hashTags;
+                let isSubSet = true;
+                configHashTags.forEach(function(checkedHash){
+                    if(postHashTags.indexOf(checkedHash) === -1) {
+                        isSubSet = false;
+                    }
+                });
+                return isSubSet;
+            }
+        }
+        return true;
+    })).slice(skip, skip + top);
+    res.end(JSON.stringify(sentPosts));
 });
 
 app.get('*', function(req, res){
