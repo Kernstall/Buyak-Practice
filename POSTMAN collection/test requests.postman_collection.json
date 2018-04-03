@@ -11,7 +11,7 @@
 			"name": "http://localhost:3000/remove",
 			"request": {
 				"url": "http://localhost:3000/remove",
-				"method": "PUT",
+				"method": "DELETE",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -28,10 +28,10 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/rename",
+			"name": "http://localhost:3000/add",
 			"request": {
 				"url": "http://localhost:3000/add",
-				"method": "PUT",
+				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -41,7 +41,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"description\": \"new descr\",\n\t\"author\": \"Roman\",\n\t\"hashTags\": [\"like4Like\", \"HelloWorld\"],\n\t\"photoLink\": \"https://source.unsplash.com/random/801x600\"\n}"
+					"raw": "{\n\t\"description\": \"new descr2\",\n\t\"author\": \"Roman\",\n\t\"hashTags\": [\"like4Like\", \"HelloWorld\"],\n\t\"photoLink\": \"https://source.unsplash.com/random/801x600\"\n}"
 				},
 				"description": ""
 			},

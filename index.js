@@ -78,22 +78,26 @@ app.post('/add',function (req, res) {
         post.visible = true;
         post.createdAt = new Date();
         addPhotoPost(post);
-        res.end('ok');
+        res.status(200);
+        res.end();
     }else{
-        res.end('fail');
+        res.status(400);
+        res.end();
     }
 });
 
 app.put('/edit', function (req, res) {
     let result = editPhotoPost(req.body.id, req.body);
     if(result){
-        res.end('ok');
+        res.status(200);
+        res.end();
     }else{
-        res.end('fail');
+        res.status(404);
+        res.end();
     }
 });
 
-app.put('/remove', function (req, res) {
+app.delete('/remove', function (req, res) {
     let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
     let postIndex = photoPosts.findIndex(function (element) {
         if(element.id===req.body.id) {
@@ -105,10 +109,12 @@ app.put('/remove', function (req, res) {
 
     if(postIndex!==-1){
         photoPosts[postIndex].visible = false;
-        res.end('ok');
+        res.status(200);
+        res.end();
         fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts) );
     }else{
-        res.end('fail');
+        res.status(404);
+        res.end();
     }
 });
 
