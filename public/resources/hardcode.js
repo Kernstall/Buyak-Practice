@@ -75,7 +75,7 @@ function assembleFilterConfig(inputForm){
 }
 
 function onSubmitWrapper(inputForm){
-    POST_API.applyFilterAndRedraw(assembleFilterConfig(inputForm));
+    CONTROLLER.applyFilterAndRedraw(assembleFilterConfig(inputForm));
     return false;
 }
 

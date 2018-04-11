@@ -6,10 +6,11 @@
     <link rel="stylesheet" type="text/css" href="styles/w3schools.css">
     <link rel="stylesheet" type="text/css" href="styles/loginStyles.css">
     <script src="resources/hardcode.js" type="text/javascript" defer></script>
-    <script src="resources/photoPostModule.js" type="text/javascript" defer></script>
+    <script src="resources/controller.js" type="text/javascript" defer></script>
     <script src="resources/navManager.js" type="text/javascript" defer></script>
+    <script src="resources/dao.js" type="text/javascript" defer></script>
+    <script src="resources/view.js" type="text/javascript" defer></script>
     <script src="resources/onLoadStartup.js" type="text/javascript" defer></script>
-    <script src="test/test.js" type="text/javascript" defer></script>
     <meta charset="UTF-8">
     <title>Title</title>
     <template id="postTemplate">
@@ -50,10 +51,8 @@
     </template>
     <template id="feedAndFilterTemplate">
         <div class="feedAndFilterHolder">
-
             <main class="feedList">
             </main>
-
             <div class="filterPanel">
                 <div class="stickyFilterScroller">
                     <form onsubmit="return onSubmitWrapper(this);">
@@ -87,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="loadMore"><h class = "loadMoreText" onclick="POST_API.loadMorePosts(5, filterConfig)">Load More</h></div>
+            <div class="loadMore"><h class = "loadMoreText" onclick="CONTROLLER.loadMorePosts(5, filterConfig)">Load More</h></div>
 
         </div>
     </template>
@@ -100,7 +99,7 @@
                 <i class="fa fa-bookmark fa-descr"></i>
             </div>
             <div class="form-group">
-                <input type="file" name ="postImg" class="file-form-control" placeholder="Drag your image here " id="postImage">
+                <input type="file" name ="postImg" class="file-form-control" placeholder="Drag your image here " id="postImage" accept="image/x-png,image/gif,image/jpeg">
                 <!--<label class="selectFileBtn" for="postImage">Select or drag-and-drop a file...</label>!-->
             </div>
 
@@ -113,7 +112,6 @@
             <button class="filterApplyButton">Apply</button>
         </form>
     </template>
-
     <template id="postEditTemplate">
         <form class="edit-form" onsubmit="return false;">
             <h1 class="AddPostLabel" >Enter the data you want to edit</h1>
@@ -131,7 +129,6 @@
             <button class="filterApplyButton">Apply</button>
         </form>
     </template>
-
     <datalist id="tagOptions">
     </datalist>
 </head>
@@ -141,7 +138,7 @@
             <div class="homeWrapper">
                 <a class="headerLink" href="#">
                     <div>
-                        <h3 class="homeH3" onclick="SPA_MANAGER.toPostsAction()">Home</h3>
+                        <h3 class="homeH3" onclick="VIEW.toPostsAction()">Home</h3>
                     </div>
                 </a>
             </div>

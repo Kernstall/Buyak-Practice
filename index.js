@@ -1,6 +1,10 @@
-const http = require('http');
+const http = require('url');
 const fs = require('fs');
-const qs = require('querystring');
+const multer = require('multer');
+const imgPath='./public/data/img/';
+const serverPath = 'data/img/';
+
+const upload = multer({ dest : imgPath });
 const express = require('express');
 const bodyParser  = require('body-parser');
 
@@ -11,9 +15,8 @@ function validatePhotoPost(photoPost) {
     if(photoPost){
         let isDescriptionValid = typeof photoPost.description === "string" && photoPost.description.length < 200;
         let isAuthorValid = typeof photoPost.author === "string" && photoPost.author.length > 0;
-        let isPhotoLinkValid = typeof photoPost.photoLink === "string" && photoPost.photoLink.length > 0 ;
         let isTagsValid = Array.isArray(photoPost.hashTags);
-        return isDescriptionValid && isAuthorValid && isPhotoLinkValid && isTagsValid;
+        return isDescriptionValid && isAuthorValid && isTagsValid;
     }
     return false;
 }
@@ -21,6 +24,9 @@ function validatePhotoPost(photoPost) {
 function addPhotoPost(photoPost){
     let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
     photoPosts = photoPosts.concat(photoPost);
+    photoPosts.sort(function (a, b) {
+        return Date.parse(b.createdAt) - Date.parse(a.createdAt);
+    });
     fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts) );
 }
 
@@ -70,20 +76,6 @@ app.get('/', function (req, res) {
         else
             res.end(data);
     });
-});
-app.post('/add',function (req, res) {
-    if(validatePhotoPost(req.body)){
-        let post = req.body;
-        post.id = new Date().getTime().toString();
-        post.visible = true;
-        post.createdAt = new Date();
-        addPhotoPost(post);
-        res.status(200);
-        res.end();
-    }else{
-        res.status(400);
-        res.end();
-    }
 });
 
 app.put('/edit', function (req, res) {
@@ -170,4 +162,43 @@ app.get('*', function(req, res){
     res.send('Sorry, this page was not found', 404);
 });
 
-app.listen(3000);
+//app.post('/test', (req, res)=>{
+//    console.log(req.body.postData);
+//});
+
+app.post('/add', upload.single('img'), (req, res, next) => {
+    let picUploadResult = false;
+
+    let jsonPost = JSON.parse(req.body.postData);
+
+    if(validatePhotoPost(jsonPost)) { //check request post data for validity
+
+        let tmp_path = req.file.path;
+        let target_path = tmp_path + '.' + req.file.originalname.split('.').pop();
+        let clentPath = serverPath + target_path.split('\\').pop(); //target_path.replace(/\\/g, '/');
+        let src = fs.createReadStream(tmp_path);
+        let dest = fs.createWriteStream(target_path);
+
+        src.pipe(dest); //Try to upload picture on server
+        src.on('end', function () { //if we succeed - add photo post
+            jsonPost.id = new Date().getTime().toString();
+            jsonPost.visible = true;
+            jsonPost.createdAt = (new Date()).toUTCString();
+            jsonPost.likes = [];
+            jsonPost.photoLink = clentPath;
+            addPhotoPost(jsonPost);
+            res.status(200);
+            res.end();
+        });
+        src.on('error', function (err) { res.status(520); res.end()});
+
+        fs.unlink(tmp_path);
+    }else{
+        res.status(400);
+        res.end();
+    }
+});
+
+app.listen(3000, () => {
+    console.log('Server is running');
+});
