@@ -1,11 +1,4 @@
 const SPA_MANAGER = (function () {
-    if (!localStorage.users) {
-        localStorage.users = JSON.stringify([{
-            username: 'Alex B.',
-            password: 'admin'
-        }]);
-    }
-
     let tagIdCounter = 0;
 
     function initializeFilter() {

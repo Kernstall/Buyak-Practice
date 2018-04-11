@@ -1,0 +1,144 @@
+{
+	"variables": [],
+	"info": {
+		"name": "test requests",
+		"_postman_id": "4112070b-93ee-0ef1-a828-fbfbc72922c9",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/remove",
+			"request": {
+				"url": "http://localhost:3000/remove",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/add",
+			"request": {
+				"url": "http://localhost:3000/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\": \"new descr2\",\n\t\"author\": \"Roman\",\n\t\"hashTags\": [\"like4Like\", \"HelloWorld\"],\n\t\"photoLink\": \"https://source.unsplash.com/random/801x600\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/load",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var date = new Date().toString();"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:3000/load",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"skip\": 0,\r\n\t\"top\": 5,\r\n\t\"filterConfig\":{\r\n\t\t\"author\": \"Alex B.\"\r\n\t}\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/edit",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var date = new Date().toString();"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:3000/edit",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\":\"1\",\r\n\t\"description\": \"Test description2\"\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET method",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var date = new Date().toString();"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:3000",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\":\"1\",\r\n\t\"description\": \"Test description2\"\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
