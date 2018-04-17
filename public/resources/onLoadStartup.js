@@ -1,1 +1,2 @@
-VIEW.toPostsAction();
+VIEW.toPostFeed();
+VIEW.updateHeader();

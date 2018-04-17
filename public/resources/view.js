@@ -1,4 +1,5 @@
 const VIEW = (function(){
+    let tagIdCounter = 0;
     function drawBackPostOnScreen(photoPost){
         let postHolder = document.body.querySelector('.feedList');
         let post = VIEW.assemblePhotoPost(photoPost);
@@ -16,7 +17,12 @@ const VIEW = (function(){
 
     function initializeFilter() {
         let tagInput = document.getElementById('tagInput');
-        tagFilterHolder = document.getElementsByClassName('filterHashTagContainer')[0];
+        tagFilterHolder = document.body.querySelector('.filterHashTagContainer');
+        tagFilterHolder.addEventListener('click', (event)=>{
+            if(event.target.classList.contains('cancelMask')){
+                event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+            }
+        });
         tagInput.addEventListener('keypress', function (event) {
             if (event.charCode === 13) {
                 event.preventDefault();
@@ -32,7 +38,6 @@ const VIEW = (function(){
                         let tagCancel = document.createElement('div');
                         tagCancel.setAttribute('class', 'cancelMask');
                         tagCancel.setAttribute('id', 'cancelTag' + tagIdCounter);
-                        tagCancel.setAttribute('onclick', 'removeTagFromContainer(this);');
                         hashTag.appendChild(tagCancel);
                         tagFilterHolder.appendChild(hashTag);
                         tagInput.value = '';
@@ -67,7 +72,7 @@ const VIEW = (function(){
             removeMask.setAttribute('onclick', 'CONTROLLER.removePhotoPost(\"'+photoPost.id+'\");');
             let editMask = post.querySelector('.editMask');
             editMask.setAttribute('id', photoPost.id);
-            editMask.setAttribute('onclick', 'SPA_MANAGER.toEditPost(\"'+photoPost.id+'\");');
+            editMask.setAttribute('onclick', 'VIEW.toEditPost(this);');
             if(username!==photoPost.author){
                 removeMask.style='display: none;';
                 editMask.style='display: none;';
@@ -105,7 +110,7 @@ const VIEW = (function(){
             DAO.flushPostCounter();
         },
 
-        toPostsAction: function () {
+        toPostFeed: function () {
             let feedHolder = document.body.querySelector('.feedAndFilterHolder');
             let feedAndFilterTemplate = document.getElementById('feedAndFilterTemplate');
             let newFeedHolder = feedAndFilterTemplate.content.cloneNode(true);
@@ -117,5 +122,163 @@ const VIEW = (function(){
             CONTROLLER.applyFilterAndRedraw();
             return false;
         },
+
+        toEditPost: function (editMask) {
+            if (username !== '') {
+
+                let post = {};
+                let htmlPost = editMask.parentNode.parentNode.parentNode;
+                post.id = htmlPost.id;
+                post.description = htmlPost.querySelector('.postDescription').textContent;
+                post.hashTags = [];
+                let editPostTagHolder = htmlPost.querySelector('.hashTagHolder');
+                let NodeArray = Array.from(editPostTagHolder.children);
+                NodeArray.forEach(function (element) {
+                    post.hashTags.push(element.textContent);
+                });
+
+
+                let feedHolder = document.body.querySelector('.feedAndFilterHolder');
+                while (feedHolder.firstChild) {
+                    feedHolder.removeChild(feedHolder.firstChild);
+                }
+
+                let postEditTemplate = document.getElementById('postEditTemplate');
+                let postEdit = postEditTemplate.content.cloneNode(true);
+                let tagInput = postEdit.querySelector('#editPostTagInput');
+                let addPostTagHolder = postEdit.querySelector('.filterHashTagContainer');
+                postEdit.querySelector('.edit-form').setAttribute('onsubmit', 'return CONTROLLER.editPostSubmitAction(\'' + post.id + '\', this);');
+
+                addPostTagHolder.addEventListener('click', (event)=>{
+                    if(event.target.classList.contains('cancelMask')){
+                        event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+                    }
+                });
+                tagInput.addEventListener('keypress', function (event) {
+                    if (event.charCode === 13) {
+                        event.preventDefault();
+                        if (tagInput.value !== '') {
+                            let checkTagInContainer = Array.from(addPostTagHolder.childNodes).find(function (element) {
+                                return element.textContent === tagInput.value;
+                            });
+
+                            if (checkTagInContainer === undefined) {
+                                let hashTag = document.createElement('div');
+                                hashTag.setAttribute('class', 'hashTag');
+                                hashTag.textContent = tagInput.value;
+                                let tagCancel = document.createElement('div');
+                                tagCancel.setAttribute('class', 'cancelMask');
+                                tagCancel.setAttribute('id', 'cancelTag' + tagIdCounter);
+                                hashTag.appendChild(tagCancel);
+                                addPostTagHolder.appendChild(hashTag);
+                                tagInput.value = '';
+                            } else {
+                                alert('You already added this tag into filter');
+                            }
+                        }
+                    }
+                });
+
+                let tagHolder = postEdit.querySelector('.filterHashTagContainer');
+
+                postEdit.querySelector('.textarea-form-control').value = post.description;
+
+                post.hashTags.forEach(function (elem) {
+                    let hashTag = document.createElement('div');
+                    hashTag.setAttribute('class', 'hashTag');
+                    hashTag.textContent = elem;
+                    let tagCancel = document.createElement('div');
+                    tagCancel.setAttribute('class', 'cancelMask');
+                    hashTag.appendChild(tagCancel);
+                    addPostTagHolder.appendChild(hashTag);
+                });
+                CONTROLLER.updateFilterHashTagHints();
+                feedHolder.appendChild(postEdit);
+                document.body.insertBefore(feedHolder, document.getElementsByClassName("footer")[0]);
+            } else {
+                alert('You must sign in to use this option');
+            }
+        },
+
+        toAddPost: function () {
+            if (username !== '') {
+
+                let feedHolder = document.getElementsByClassName('feedAndFilterHolder')[0];
+                while (feedHolder.firstChild) {
+                    feedHolder.removeChild(feedHolder.firstChild);
+                }
+
+                let postAddTemplate = document.getElementById('postAddTemplate');
+                let postAdd = postAddTemplate.content.cloneNode(true);
+                let tagInput = postAdd.querySelector('#addPostTagInput');
+                let addPostTagHolder = postAdd.querySelector('.filterHashTagContainer');
+
+                addPostTagHolder.addEventListener('click', (event)=>{
+                    if(event.target.classList.contains('cancelMask')){
+                        event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+                    }
+                });
+                tagInput.addEventListener('keypress', function (event) {
+                    if (event.charCode === 13) {
+                        event.preventDefault();
+                        if (tagInput.value !== '') {
+                            let checkTagInContainer = Array.from(addPostTagHolder.childNodes).find(function (element) {
+                                return element.textContent === tagInput.value;
+                            });
+
+                            if (checkTagInContainer === undefined) {
+                                let hashTag = document.createElement('div');
+                                hashTag.setAttribute('class', 'hashTag');
+                                hashTag.textContent = tagInput.value;
+                                let tagCancel = document.createElement('div');
+                                tagCancel.setAttribute('class', 'cancelMask');
+                                tagCancel.setAttribute('id', 'cancelTag' + tagIdCounter);
+                                hashTag.appendChild(tagCancel);
+                                addPostTagHolder.appendChild(hashTag);
+                                tagInput.value = '';
+                            } else {
+                                alert('You already added this tag into filter');
+                            }
+                        }
+                    }
+                });
+                CONTROLLER.updateFilterHashTagHints();
+                feedHolder.appendChild(postAdd);
+                document.body.insertBefore(feedHolder, document.getElementsByClassName("footer")[0]);
+            } else {
+                alert('You must sign in to use this option');
+            }
+        },
+
+        updateHeader: function() {
+        let headers = document.getElementsByClassName('logOutH3');
+        let signInText = headers[0];
+        let guestText = headers[1];
+        if (username === '') {
+            signInText.textContent = 'Sign in';
+            guestText.textContent = 'Guest';
+            document.getElementsByClassName('userWrapper')[0].removeChild( document.getElementsByClassName('userAvatarWrapper')[0]);
+        } else {
+            signInText.textContent = ' Log Out';
+            guestText.textContent = username;
+
+            let userWrapper = document.getElementsByClassName('userWrapper')[0];
+
+            if(!userWrapper.querySelector('.userAvatarWrapper')){
+                let avatarWrapper = document.createElement('div');
+                avatarWrapper.setAttribute('class', 'userAvatarWrapper');
+                let div = document.createElement('div');
+                let avatar = document.createElement('img');
+                avatar.setAttribute('class', 'userAvatarPic');
+                avatar.setAttribute('src', 'resources/avatar.png');
+
+                avatarWrapper.appendChild(div);
+                userWrapper.insertBefore(avatarWrapper, userWrapper.firstChild );
+
+                div.appendChild(avatar);
+            }
+
+        }
+    }
     }
 })();

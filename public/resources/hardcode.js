@@ -3,39 +3,7 @@ if (!localStorage.username){
 }
 let username = localStorage.username;
 
-let filterConfig = new Object();
-
-function updateHeader() {
-    let headers = document.getElementsByClassName('logOutH3');
-    let signInText = headers[0];
-    let guestText = headers[1];
-    if (username === '') {
-        signInText.textContent = 'Sign in';
-        guestText.textContent = 'Guest';
-        document.getElementsByClassName('userWrapper')[0].removeChild( document.getElementsByClassName('userAvatarWrapper')[0]);
-    } else {
-        signInText.textContent = ' Log Out';
-        guestText.textContent = username;
-
-        let userWrapper = document.getElementsByClassName('userWrapper')[0];
-
-        if(!userWrapper.querySelector('.userAvatarWrapper')){
-            let avatarWrapper = document.createElement('div');
-            avatarWrapper.setAttribute('class', 'userAvatarWrapper');
-            let div = document.createElement('div');
-            let avatar = document.createElement('img');
-            avatar.setAttribute('class', 'userAvatarPic');
-            avatar.setAttribute('src', 'resources/avatar.png');
-
-            avatarWrapper.appendChild(div);
-            userWrapper.insertBefore(avatarWrapper, userWrapper.firstChild );
-
-            div.appendChild(avatar);
-        }
-
-    }
-}
-updateHeader();
+let filterConfig = {};
 
 let tagFilterHolder = document.getElementsByClassName('filterHashTagContainer')[0];
 
@@ -48,7 +16,7 @@ function removeTagFromContainer(node){
 
 function assembleFilterConfig(inputForm){
 
-    filterConfig = new Object();
+    filterConfig = {};
 
     if(document.getElementById("usernameFilterCheckbox").checked){
         filterConfig.author = inputForm.usernameFilter.value;

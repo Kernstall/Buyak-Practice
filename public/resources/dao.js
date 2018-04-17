@@ -48,8 +48,6 @@ const DAO = (function(){
         },
 
         addPhotoPost: function (photoPost, blobFile) {
-            //console.log(file instanceof Blob);
-            //let file = new File([blobFile], "sentPicFileName");
             let formData = new FormData();
             formData.append('img', blobFile );
             formData.append('postData', JSON.stringify(photoPost) );
@@ -57,10 +55,40 @@ const DAO = (function(){
             xhr.open('POST', '/add', false);
             xhr.send(formData);
                 if (xhr.status === 200) {
-                    console.log('YAY!');
                     return true;
                 }
             return false;
+        },
+
+        editPhotoPost: function(editData, blobFile ){
+            let formData = new FormData();
+            if(blobFile) {
+                formData.append('img', blobFile);
+            }
+            formData.append('editData', JSON.stringify(editData) );
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/edit', false);
+            xhr.send(formData);
+            if (xhr.status === 200) {
+                return true;
+            }
+            return false;
+        },
+
+        likePost: function(id){
+            let body = JSON.stringify({
+                id:id,
+                username: username
+            });
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/like', false);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.send(body);
+            if(xhr.status === 200){
+                return Number.parseInt(xhr.response);
+            }else{
+                return -1;
+            }
         },
 
         flushPostCounter: function(){

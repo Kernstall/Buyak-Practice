@@ -17,8 +17,6 @@ img::selection {
 .homeWrapper:hover, .userWrapper:hover, .logOutWrapper:hover{
     background-color: #aa2222;
 }
-
-
 .header{
     height: 50px;
     width: 100%;
@@ -26,10 +24,10 @@ img::selection {
     top: 0px;
     z-index: 666;
 }
-
 .homeWrapper{
      float: left;
-     width: 80px;
+    width: fit-content;
+     min-width: 80px;
      height: inherit;
      background-color: inherit;
  }
@@ -78,7 +76,6 @@ img::selection {
     font-size: 50px;
     color: #fefac0;
 }
-
 .userAvatarPic{
     height: 50px;
     width: 50px;
@@ -300,8 +297,6 @@ p.postTime{
     margin: 20px 10px 20px 50px;
     font-family: "Arial Rounded MT Bold";
 }
-
-
 .filter{
     position: absolute;
     right: 0;
@@ -354,7 +349,6 @@ p.postTime{
 .filterApplyButton:focus{
     outline: none;
 }
-
 @media (min-width: 960px) {
     .informativeHeader {
         width: 850px;

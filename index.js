@@ -11,6 +11,16 @@ const bodyParser  = require('body-parser');
 const staticBasePath = './public';
 const app = express();
 
+function validateEditInput(editForm){
+    if(editForm){
+        let isDescriptionValid =  editForm.description ? ( typeof editForm.description === "string" && editForm.description.length < 200) : true;
+        let isAuthorValid = editForm.author ? (typeof editForm.author === "string" && editForm.author.length > 0) : true;
+        let isTagsValid = editForm.hashTags ?  Array.isArray(editForm.hashTags) : true;
+        return isDescriptionValid && isAuthorValid && isTagsValid;
+    }
+    return false;
+}
+
 function validatePhotoPost(photoPost) {
     if(photoPost){
         let isDescriptionValid = typeof photoPost.description === "string" && photoPost.description.length < 200;
@@ -30,7 +40,7 @@ function addPhotoPost(photoPost){
     fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts) );
 }
 
-function editPhotoPost (id, photoPost) {
+function editPhotoPost (id, photoPost, imagePath) {
     let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
     let ind;
     let post = photoPosts.find(function(el, i){
@@ -53,6 +63,9 @@ function editPhotoPost (id, photoPost) {
         }
         if (photoPost.hashTags && photoPost.hashTags.length > 0) {
             temp.hashTags = photoPost.hashTags.slice();
+        }
+        if (imagePath) {
+            temp.photoLink = imagePath;
         }
         if (validatePhotoPost(temp)) {
             photoPosts.splice(ind, 1, temp);
@@ -78,14 +91,34 @@ app.get('/', function (req, res) {
     });
 });
 
-app.put('/edit', function (req, res) {
-    let result = editPhotoPost(req.body.id, req.body);
+app.post('/edit', upload.single('img'), (req, res, next)=>{
+    let jsonEdit = JSON.parse(req.body.editData);
+    if(!jsonEdit){
+        res.status(400);
+        res.end();
+        return;
+    }
+    let result = validateEditInput(jsonEdit);
     if(result){
-        res.status(200);
-        res.end();
+        let clentPath;
+        if(req.file){
+            let tmp_path = req.file.path;
+            let target_path = tmp_path + '.' + req.file.originalname.split('.').pop();
+            clentPath = serverPath + target_path.split('\\').pop();
+            let src = fs.createReadStream(tmp_path);
+            let dest = fs.createWriteStream(target_path);
+            src.pipe(dest);
+            src.on('error', function (err) {res.send(500);});
+            fs.unlink(tmp_path);
+        }
+        let hasEditSucceed = editPhotoPost(jsonEdit.id, jsonEdit, clentPath);
+        if(hasEditSucceed){
+            res.send(200);
+        }else{
+            res.send(400);
+        }
     }else{
-        res.status(404);
-        res.end();
+        res.send(404);
     }
 });
 
@@ -136,8 +169,9 @@ app.put('/load', function (req, res) {
                 return false;
             }
             if (req.body.filterConfig.createdAt) {
-                let firstDate = value.createdAt;
-                let secondDate = req.body.filterConfig.createdAt;
+                let firstDate = new Date(value.createdAt);
+                let secondDate = new Date(req.body.filterConfig.createdAt);
+
                 if (!(firstDate.getDate() === secondDate.getDate() && firstDate.getFullYear() === secondDate.getFullYear() && firstDate.getMonth() === secondDate.getMonth()))
                     return false;
             }
@@ -159,14 +193,39 @@ app.put('/load', function (req, res) {
 });
 
 app.get('*', function(req, res){
-    res.send('Sorry, this page was not found', 404);
+    res.status(404).send('Sorry, this page was not found');
 });
 
-//app.post('/test', (req, res)=>{
-//    console.log(req.body.postData);
-//});
+app.post('/like', (req, res)=>{
+    let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
+    let postIndex = photoPosts.findIndex(function (element) {
+        if(element.id===req.body.id) {
+            return true;
+        }
+        return false;
+    });
+    if(postIndex!==-1){
+        let post = photoPosts[postIndex];
+        let usernameIndex = post.likes.indexOf(req.body.username);
+        if(usernameIndex!== -1){
+            post.likes.splice(usernameIndex);
+        }else{
+            post.likes.push(req.body.username);
+        }
+        fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts) );
+        res.status(200).end(post.likes.length.toString());
+    }else{
+        res.status(404);
+    }
+});
 
 app.post('/add', upload.single('img'), (req, res, next) => {
+
+    if(!req.file){
+        res.send(400);
+        return;
+    }
+
     let picUploadResult = false;
 
     let jsonPost = JSON.parse(req.body.postData);
@@ -190,7 +249,7 @@ app.post('/add', upload.single('img'), (req, res, next) => {
             res.status(200);
             res.end();
         });
-        src.on('error', function (err) { res.status(520); res.end()});
+        src.on('error', function (err) { res.status(500); res.end()});
 
         fs.unlink(tmp_path);
     }else{
