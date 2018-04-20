@@ -125,7 +125,6 @@ const VIEW = (function(){
 
         toEditPost: function (editMask) {
             if (username !== '') {
-
                 let post = {};
                 let htmlPost = editMask.parentNode.parentNode.parentNode;
                 post.id = htmlPost.id;
@@ -136,12 +135,6 @@ const VIEW = (function(){
                 NodeArray.forEach(function (element) {
                     post.hashTags.push(element.textContent);
                 });
-
-
-                let feedHolder = document.body.querySelector('.feedAndFilterHolder');
-                while (feedHolder.firstChild) {
-                    feedHolder.removeChild(feedHolder.firstChild);
-                }
 
                 let postEditTemplate = document.getElementById('postEditTemplate');
                 let postEdit = postEditTemplate.content.cloneNode(true);
@@ -192,11 +185,18 @@ const VIEW = (function(){
                     hashTag.appendChild(tagCancel);
                     addPostTagHolder.appendChild(hashTag);
                 });
+                postEdit.querySelector('.modalWrapper').addEventListener('click', (event)=>{
+                    if(event.target.classList.contains('modalWrapper')){
+                        VIEW.toPostFeed();
+                    }
+                });
                 CONTROLLER.updateFilterHashTagHints();
+                let feedHolder = document.body.querySelector('.feedAndFilterHolder');
                 feedHolder.appendChild(postEdit);
                 document.body.insertBefore(feedHolder, document.getElementsByClassName("footer")[0]);
             } else {
                 alert('You must sign in to use this option');
+                //TODO::ERROR MESSAGE
             }
         },
 

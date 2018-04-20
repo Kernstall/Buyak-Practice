@@ -11,17 +11,20 @@
     transform: translateY(-50%);
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
-.edit-form {
+.add-form, .edit-form {
+    padding: 40px 30px 10px 30px;
     width: 450px;
-    padding: 40px 30px;
-    background: inherit;
+    background: #f9f9f9;
     border-radius: 4px;
-    margin: auto;
-    position: absolute;
     left: 0;
     right: 0;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
     min-height: 600px;
+}
+.add-form{
+    padding: 40px 30px;
+    margin: auto;
+    position: absolute;
 }
 .form-group{
     color: #999;
