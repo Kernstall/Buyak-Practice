@@ -204,8 +204,11 @@ const CONTROLLER = (function(){
 
             return false;
 
-        }
+        },
 
+        subscribeToUpdates(){
+            DAO.subscribeUpdates();
+        }
 
     }
 })();

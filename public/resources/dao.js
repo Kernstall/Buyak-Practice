@@ -15,6 +15,21 @@ const DAO = (function(){
     }
 
     return{
+        subscribeUpdates: function(){
+            let body = JSON.stringify({
+                continue: true,
+                username: username
+            });
+            let xhr = new XMLHttpRequest();
+            xhr.onload = ()=>{
+                VIEW.drawPostFront(JSON.parse(xhr.response));
+                CONTROLLER.subscribeToUpdates();
+            };
+            xhr.open('POST', '/subscribe', true);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.send(body);
+        },
+
         getPhotoPosts : function  (top = 10, filterConfig) {
         let body = JSON.stringify({
             skip: lastPostCounter,

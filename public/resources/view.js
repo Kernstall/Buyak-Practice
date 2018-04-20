@@ -51,6 +51,16 @@ const VIEW = (function(){
     }
 
     return{
+
+
+        drawPostFront: function (photoPost) {
+            let postHolder = document.body.querySelector('.feedList');
+            let post = VIEW.assemblePhotoPost(photoPost);
+            if (post) {
+                postHolder.insertBefore( post, postHolder.firstChild);
+            }
+        },
+
         assemblePhotoPost : function(photoPost){
             const dateFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', };
         if( CONTROLLER.validatePhotoPost(photoPost)) {

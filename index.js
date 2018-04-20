@@ -11,6 +11,25 @@ const bodyParser  = require('body-parser');
 const staticBasePath = './public';
 const app = express();
 
+const SYNC_LIST = (function(){ //list for storing httpResponses, stores pairs username/response, will be changed into session/response later
+    let container = {};
+    let accessibilityFlag = true;
+    return{
+        add: function(username, httpResponse){ //TODO:: make synchronous
+            container[username] = httpResponse;
+        },
+        closeConnection:function (username, statusCode) {
+            container[username].sendStatus(statusCode);
+            delete container[username]
+        },
+        forEach: function (callbackFunction) {
+            for(let username in container){
+                callbackFunction(container[username]);
+            }
+        }
+    }
+})();
+
 function validateEditInput(editForm){
     if(editForm){
         let isDescriptionValid =  editForm.description ? ( typeof editForm.description === "string" && editForm.description.length < 200) : true;
@@ -108,17 +127,17 @@ app.post('/edit', upload.single('img'), (req, res, next)=>{
             let src = fs.createReadStream(tmp_path);
             let dest = fs.createWriteStream(target_path);
             src.pipe(dest);
-            src.on('error', function (err) {res.send(500);});
+            src.on('error', function (err) {res.sendStatus(500);});
             fs.unlink(tmp_path);
         }
         let hasEditSucceed = editPhotoPost(jsonEdit.id, jsonEdit, clentPath);
         if(hasEditSucceed){
-            res.send(200);
+            res.sendStatus(200);
         }else{
-            res.send(400);
+            res.sendStatus(400);
         }
     }else{
-        res.send(404);
+        res.sendStatus(404);
     }
 });
 
@@ -222,7 +241,7 @@ app.post('/like', (req, res)=>{
 app.post('/add', upload.single('img'), (req, res, next) => {
 
     if(!req.file){
-        res.send(400);
+        res.sendStatus(400);
         return;
     }
 
@@ -246,6 +265,9 @@ app.post('/add', upload.single('img'), (req, res, next) => {
             jsonPost.likes = [];
             jsonPost.photoLink = clentPath;
             addPhotoPost(jsonPost);
+            SYNC_LIST.forEach((subscriberRes)=>{//we update every client subscribed
+                subscriberRes.send(JSON.stringify(jsonPost));
+            });
             res.status(200);
             res.end();
         });
@@ -255,6 +277,17 @@ app.post('/add', upload.single('img'), (req, res, next) => {
     }else{
         res.status(400);
         res.end();
+    }
+});
+
+app.post('/subscribe', (req, res)=>{
+    if(req.body.username===undefined){
+        res.sendStatus(400);
+    }
+    if(req.body.continue === true){
+        SYNC_LIST.add(req.body.username, res);
+    }else{
+        SYNC_LIST.closeConnection(req.body.username, 200);
     }
 });
 
