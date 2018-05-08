@@ -51,7 +51,50 @@ const VIEW = (function(){
     }
 
     return{
+        filterDispel: function () {
+            let filter = document.getElementsByClassName('filter')[0];
 
+            let display = filter.style.opacity;
+
+            if (display == 0) {
+                filter.classList.remove('fade');
+                setTimeout(function () {
+                    if (display == 0)
+                        filter.style.opacity = 1;
+                }, 0);
+            }
+            else {
+                filter.style.opacity = 0;
+                setTimeout(function () {
+                    if (filter.style.opacity == 0)
+                        filter.classList.add('fade');
+                }, 750)
+            }
+        },
+
+        assembleFilterConfig: function (inputForm) {
+            filterConfig = {};
+            if (document.getElementById("usernameFilterCheckbox").checked) {
+                filterConfig.author = inputForm.usernameFilter.value;
+                if (filterConfig.author === '') {
+                    return;
+                }
+            }
+            if (document.getElementById("dateFilterCheckbox").checked) {
+                filterConfig.createdAt = new Date(inputForm.dateFilter.value);
+                if (!filterConfig.createdAt) {
+                    return;
+                }
+            }
+            if (tagFilterHolder.childNodes.length > 0) {
+                filterConfig.hashTags = [];
+                let NodeArray = Array.from(tagFilterHolder.childNodes);
+                NodeArray.forEach(function (element) {
+                    filterConfig.hashTags.push(element.firstChild.textContent);
+                })
+            }
+            return filterConfig;
+        },
 
         drawPostFront: function (photoPost) {
             let postHolder = document.body.querySelector('.feedList');
@@ -107,7 +150,7 @@ const VIEW = (function(){
             let feedList = document.getElementsByClassName("feedList")[0];
             if(feedList){
                 VIEW.clearFeed();
-                let posts = DAO.getPhotoPosts(3 ,  filterConfig);
+                let posts = CONTROLLER.loadMorePosts(3, filterConfig);
                 VIEW.drawList(posts);
             }
         },
@@ -150,7 +193,12 @@ const VIEW = (function(){
                 let postEdit = postEditTemplate.content.cloneNode(true);
                 let tagInput = postEdit.querySelector('#editPostTagInput');
                 let addPostTagHolder = postEdit.querySelector('.filterHashTagContainer');
-                postEdit.querySelector('.edit-form').setAttribute('onsubmit', 'return CONTROLLER.editPostSubmitAction(\'' + post.id + '\', this);');
+                //postEdit.querySelector('.edit-form').setAttribute('onsubmit', 'return CONTROLLER.editPostSubmitAction(\'' + post.id + '\', this);');
+
+                let submitBtn = postEdit.querySelector('.filterApplyButton');
+                submitBtn.addEventListener('click', (event) => {
+                    CONTROLLER.editPostSubmitAction(post.id, document.body.querySelector('.edit-form'));
+                });
 
                 addPostTagHolder.addEventListener('click', (event)=>{
                     if(event.target.classList.contains('cancelMask')){
@@ -228,6 +276,12 @@ const VIEW = (function(){
                         event.target.parentNode.parentNode.removeChild(event.target.parentNode);
                     }
                 });
+
+                let submitBtn = postAdd.querySelector('.filterApplyButton');
+                submitBtn.addEventListener('click', (event) => {
+                    CONTROLLER.addPostSubmitAction(document.body.querySelector('.add-form'));
+                });
+
                 tagInput.addEventListener('keypress', function (event) {
                     if (event.charCode === 13) {
                         event.preventDefault();

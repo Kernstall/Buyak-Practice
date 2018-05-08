@@ -5,7 +5,6 @@
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="stylesheet" type="text/css" href="styles/w3schools.css">
     <link rel="stylesheet" type="text/css" href="styles/loginStyles.css">
-    <script src="resources/hardcode.js" type="text/javascript" defer></script>
     <script src="resources/controller.js" type="text/javascript" defer></script>
     <script src="resources/authentification.js" type="text/javascript" defer></script>
     <script src="resources/dao.js" type="text/javascript" defer></script>
@@ -57,7 +56,7 @@
             </main>
             <div class="filterPanel">
                 <div class="stickyFilterScroller">
-                    <form onsubmit="return onSubmitWrapper(this);">
+                    <form onsubmit="return CONTROLLER.onSubmitWrapper(this);">
                         <div class="filter fade">
                             <p class="filterProps">Filter properties:</p>
                             <div class="inputHolder">
@@ -85,7 +84,7 @@
 
                         </div>
                     </form>
-                    <div class="filterButton" onclick="filterDispel()"></div>
+                    <div class="filterButton" onclick="VIEW.filterDispel()"></div>
                 </div>
             </div>
 
@@ -96,7 +95,7 @@
         </div>
     </template>
     <template id="postAddTemplate">
-        <form class="add-form" onsubmit="return CONTROLLER.addPostSubmitAction(this)">
+        <div class="add-form">
             <h1 class="AddPostLabel">Enter valid data in forms below to continue</h1>
             <div class="form-group ">
                 <textarea type="text" name="description" class="textarea-form-control" placeholder="Description "
@@ -113,12 +112,12 @@
             </div>
             <div class="filterHashTagContainer"></div>
             <button class="filterApplyButton">Apply</button>
-        </form>
+        </div>
     </template>
     <template id="postEditTemplate">
         <div class="modalWrapper">
                 <div class="editPostModalForm">
-                <form class="edit-form" onsubmit="return false;">
+                <div class="edit-form">
                     <h1 class="AddPostLabel">Enter the data you want to edit</h1>
                     <div class="form-group ">
                     <textarea type="text" name="description" class="textarea-form-control" placeholder="Description "
@@ -139,7 +138,7 @@
                     <div class="filterHashTagContainer"></div>
 
                     <button class="filterApplyButton">Apply</button>
-                </form>
+                </div>
             </div>
         </div>
     </template>
