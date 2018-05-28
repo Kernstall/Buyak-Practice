@@ -1,13 +1,13 @@
 const postTemplate = document.getElementById('postTemplate');
 
-const filterConfig = {};
+let filterConfig = {};
 
 let username;
 
-const tagFilterHolder = document.getElementsByClassName('filterHashTagContainer')[0];
+let tagFilterHolder = document.getElementsByClassName('filterHashTagContainer')[0];
 
 const CONTROLLER = (function () {
-  const photoPosts = []; // getFromLocalStorage();
+  const photoPosts = [];
 
   const hashTagAgregator = new Set([]);
 
@@ -209,13 +209,12 @@ const CONTROLLER = (function () {
         alert('Error from server');
         // TODO::error window
       }
-
       return false;
     },
 
     async subscribeToUpdates() {
       DAO.subscribeUpdates();
-    }
+    },
 
   };
 }());

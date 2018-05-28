@@ -1,4 +1,10 @@
 [{
   "username": "Alex B.",
-  "password": "admin"
-}]
+  "password": "admin",
+  "passportIsShit" : true
+},
+  {
+    "username": "SimpleUser",
+    "password": "user"
+  }
+]

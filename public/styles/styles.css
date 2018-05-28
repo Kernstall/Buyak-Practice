@@ -116,6 +116,9 @@ img::selection {
     margin-right: auto;
     width: 420px;
 }
+.posterInfo{
+    padding-top: 8px;
+}
 h5.posterName{
 
     font-size: 16px;
@@ -141,7 +144,7 @@ p.postTime{
     display: table-cell;
     height: inherit;
     position:relative;
-    width: 50px;
+    width: 36px;
 }
 .likeMask {
     -webkit-mask-image: url(favorite1.png);
@@ -224,6 +227,7 @@ p.postTime{
     width: fit-content;
 }
 .hashTagHolder{
+    padding-top: 5px;
 }
 .hashTag::selection {
     background: transparent;
@@ -232,6 +236,9 @@ p.postTime{
     background: transparent;
 }
 .picAndDescrHolder{
+    border-right: 1px solid #e7e8ec;
+    border-bottom: 1px solid #e7e8ec;
+    padding-right: 2px;
     width: 420px;
     display: table-cell;
 }
@@ -361,7 +368,7 @@ p.postTime{
         width: 850px;
     }
     .picAndDescrHolder{
-        width: 630px;
+        width: 610px;
     }
     .postImg{
         width: 610px;

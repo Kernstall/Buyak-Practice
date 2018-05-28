@@ -1,4 +1,5 @@
 const DAO = (function () {
+    const guestUsername = "guest" + Date();
   let lastPostCounter = 0;
 
   function sendImage() {
@@ -15,17 +16,15 @@ const DAO = (function () {
   }
 
   return {
-    subscribeUpdates() {
+
+      subscribeUpdates() {
       const body = JSON.stringify({
         continue: true,
-        username
+          username: username ? username : guestUsername
       });
       const xhr = new XMLHttpRequest();
-      // xhr.onload = ()=>{
-      //   VIEW.drawPostFront(JSON.parse(xhr.response));
-      //   //CONTROLLER.subscribeToUpdates();
-      // };
-      xhr.open('POST', '/subscribe', true);
+
+          xhr.open('POST', '/subscribe', true);
       xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
       xhr.onreadystatechange = function () {
@@ -42,7 +41,7 @@ const DAO = (function () {
       xhr.send(body);
     },
 
-    async getPhotoPosts(top = 10, filterConfig) {
+      async getPhotoPosts(top = 10, filterConfig) {
       return new Promise((resolve, reject) => {
         const body = JSON.stringify({
           skip: lastPostCounter,
@@ -52,7 +51,6 @@ const DAO = (function () {
         const xhr = new XMLHttpRequest();
         xhr.open('PUT', '/load');
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        xhr.send(body);
         xhr.onload = () => {
           if (xhr.status === 200) {
             const postList = JSON.parse(xhr.response);
@@ -64,10 +62,11 @@ const DAO = (function () {
             reject();
           }
         };
+          xhr.send(body);
       });
     },
 
-    removePhotoPost(id) {
+      removePhotoPost(id) {
       const body = JSON.stringify({
         id
       });
@@ -81,14 +80,14 @@ const DAO = (function () {
       }
       return false;
     },
-    addPhotoPost(photoPost, blobFile) {
+
+      addPhotoPost(photoPost, blobFile) {
       return new Promise((resolve, reject) => {
         const formData = new FormData();
         formData.append('img', blobFile);
         formData.append('postData', JSON.stringify(photoPost));
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/add');
-        xhr.send(formData);
         xhr.onload = () => {
           if (xhr.status === 200) {
             resolve(true);
@@ -96,10 +95,12 @@ const DAO = (function () {
             reject(false);
           }
         };
+
+          xhr.send(formData);
       });
     },
 
-    editPhotoPost(editData, blobFile) {
+      editPhotoPost(editData, blobFile) {
       return new Promise((resolve, reject) => {
         const formData = new FormData();
         if (blobFile) {
@@ -108,18 +109,18 @@ const DAO = (function () {
         formData.append('editData', JSON.stringify(editData));
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/edit');
-        xhr.send(formData);
         xhr.onload = () => {
-          if (xhr.status === 200) {
-            resolve(true);
-          } else {
-            reject(false);
-          }
-        };
+              if (xhr.status === 200) {
+                  resolve(true);
+              } else {
+                  reject(false);
+              }
+          };
+          xhr.send(formData);
       });
     },
 
-    likePost(id) {
+      likePost(id) {
       return new Promise((resolve, reject) => {
         const body = JSON.stringify({
           id,
@@ -128,7 +129,6 @@ const DAO = (function () {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/like');
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        xhr.send(body);
         xhr.onload = () => {
           if (xhr.status === 200) {
             resolve(Number.parseInt(xhr.response));
@@ -136,11 +136,68 @@ const DAO = (function () {
             resolve(-1);
           }
         };
+
+          xhr.send(body);
       });
     },
 
-    flushPostCounter() {
-      lastPostCounter = 0;
-    }
+      sendLoginRequest(username, passwordHash) {
+          return new Promise((resolve, reject) => {
+              const body = JSON.stringify({
+                  username: username,
+                  password: passwordHash
+              });
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', '/login');
+              xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+              xhr.onload = () => {
+                  if (xhr.status === 200) {
+                      resolve(xhr.response);
+                  } else {
+                      resolve(undefined);
+                  }
+              };
+
+              xhr.send(body);
+          });
+      },
+
+      sendLogoutRequest(){
+
+          return new Promise((resolve, reject) => {
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', '/logout');
+              xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+              xhr.onload = () => {
+                  if (xhr.status === 200) {
+                      resolve(true);
+                  } else {
+                      resolve(false);
+                  }
+              };
+              xhr.send();
+          });
+      },
+
+      checkSession() {
+
+          return new Promise((resolve, reject) => {
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', '/checkSession');
+              xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+              xhr.onload = () => {
+                  if (xhr.status === 200) {
+                      resolve(xhr.response);
+                  } else {
+                      resolve("");
+                  }
+              };
+              xhr.send();
+          });
+      },
+
+      flushPostCounter() {
+          lastPostCounter = 0;
+      }
   };
 }());

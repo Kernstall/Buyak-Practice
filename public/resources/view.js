@@ -99,8 +99,8 @@ const VIEW = (function(){
         drawPostFront: function (photoPost) {
             let postHolder = document.body.querySelector('.feedList');
             let post = VIEW.assemblePhotoPost(photoPost);
-            if (post) {
-                postHolder.insertBefore( post, postHolder.firstChild);
+            if (post && postHolder) {
+                postHolder.firstChild ? postHolder.insertBefore( post, postHolder.firstChild):postHolder.appendChild(post);
             }
         },
 
@@ -321,7 +321,11 @@ const VIEW = (function(){
         if (username === '') {
             signInText.textContent = 'Sign in';
             guestText.textContent = 'Guest';
-            document.getElementsByClassName('userWrapper')[0].removeChild( document.getElementsByClassName('userAvatarWrapper')[0]);
+            let userWrapper = document.body.querySelector('.userWrapper');
+            let userAvatarWrapper = userWrapper.querySelector('.userAvatarWrapper');
+            if(userAvatarWrapper){
+                userWrapper.removeChild(userAvatarWrapper);
+            }
         } else {
             signInText.textContent = ' Log Out';
             guestText.textContent = username;

@@ -1,7 +1,4 @@
-if (!localStorage.username) {
-  localStorage.username = 'Alex B.';
-}
-username = localStorage.username;
+username = "";
 VIEW.toPostFeed();
-VIEW.updateHeader();
+AUTH.checkSession();
 CONTROLLER.subscribeToUpdates();

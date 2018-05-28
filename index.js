@@ -1,16 +1,34 @@
-const http = require('url');
 const fs = require('fs');
 const multer = require('multer');
 
 const imgPath = './public/data/img/';
 const serverPath = 'data/img/';
+const passport = require('passport');
 
 const upload = multer({ dest: imgPath });
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
+const LocalStrategy = require('passport-local').Strategy;
+
+let MemoryStore = session.MemoryStore;
 
 const staticBasePath = './public';
 const app = express();
+
+app.use(session({
+    key: 'logInSession',
+    secret: 'saltyHashString',
+    store: new MemoryStore({reapInterval: 60000 * 10}),
+    saveUninitialized: true,
+    resave: true,
+    cookie: {}
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(bodyParser.urlencoded({extended: true}));
 
 const SYNC_LIST = (function () { // list for storing httpResponses, stores pairs username/response, will be changed into session/response later
   const container = {};
@@ -51,15 +69,23 @@ function validatePhotoPost(photoPost) {
   return false;
 }
 
-function addPhotoPost(photoPost) {
-  let photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
+async function addPhotoPost(photoPost) {
+    let textInput = await readInputFile('server/data/posts.json');
+    let photoPosts = JSON.parse(textInput);
   photoPosts = photoPosts.concat(photoPost);
   photoPosts.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
-  fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts));
+    fs.writeFile('server/data/posts.json', JSON.stringify(photoPosts));
 }
 
-function editPhotoPost(id, photoPost, imagePath) {
-  const photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
+function readInputFile(str) {
+    return new Promise((resolve) => {
+        resolve(fs.readFileSync(str, 'utf8'));
+    });
+}
+
+async function editPhotoPost(id, photoPost, imagePath, author) {
+    let textInput = await readInputFile('server/data/posts.json');
+    const photoPosts = JSON.parse(textInput);
   let ind;
   const post = photoPosts.find((el, i) => {
     if (el.id === id) {
@@ -69,6 +95,9 @@ function editPhotoPost(id, photoPost, imagePath) {
     return false;
   });
   if (post) {
+      if (post.author !== author) {
+          return false;
+      }
     const temp = {};
     for (const k in post) {
       if (Array.isArray(post[k])) { temp[k] = post[k].slice(); } else { temp[k] = post[k]; }
@@ -84,7 +113,7 @@ function editPhotoPost(id, photoPost, imagePath) {
     }
     if (validatePhotoPost(temp)) {
       photoPosts.splice(ind, 1, temp);
-      fs.writeFileSync('server/data/posts.json', JSON.stringify(photoPosts));
+        await fs.writeFile('server/data/posts.json', JSON.stringify(photoPosts));
       return true;
     }
     return false;
@@ -92,8 +121,49 @@ function editPhotoPost(id, photoPost, imagePath) {
   return false;
 }
 
+async function findUserByUsername(username, callback) {
+    let stringUsers = await readInputFile("server/data/users.json");
+    let Users = JSON.parse(stringUsers);
+    let foundUser = Users.find((user) => {
+        return username === user.username;
+    });
+    if (foundUser) {
+        callback(null, foundUser);
+    } else {
+        let error = new Error('User does not exist.');
+        error.status = 404;
+        callback(error);
+    }
+}
+
+passport.serializeUser(function (user, done) {
+    done(null, user.username);
+});
+
+passport.deserializeUser(function (username, done) {
+    findUserByUsername(username, done);
+});
+
 app.use(bodyParser.json());
+
 app.use(express.static('public'));
+
+passport.use(new LocalStrategy(
+    async function (username, password, done) {
+        let textInput = await readInputFile('server/data/users.json');
+        let Users = JSON.parse(textInput);
+        let foundUser = Users.find((element) => {
+            return username === element.username;
+        });
+
+        if (foundUser && password === foundUser.password) {
+            return done(null, foundUser);
+        }
+        else {
+            done(null, false,'Invalid username or password.');
+        }
+    }
+));
 
 app.get('/', (req, res) => {
   const url = (req.url === '/') ? '/index.html' : req.url;
@@ -103,13 +173,21 @@ app.get('/', (req, res) => {
 });
 
 app.post('/edit', upload.single('img'), (req, res, next) => {
+
+    //console.log("user " + req.user.username + " called edit");
+    //console.log(JSON.stringify(req.user));
+    if (!req.isAuthenticated()) {
+        res.sendStatus(401);
+        return;
+    }
   const jsonEdit = JSON.parse(req.body.editData);
   if (!jsonEdit) {
     res.status(400);
     res.end();
     return;
   }
-  const result = validateEditInput(jsonEdit);
+
+    const result = validateEditInput(jsonEdit);
   if (result) {
     let clentPath;
     if (req.file) {
@@ -122,7 +200,7 @@ app.post('/edit', upload.single('img'), (req, res, next) => {
       src.on('error', (err) => { res.sendStatus(500); });
       fs.unlink(tmp_path);
     }
-    const hasEditSucceed = editPhotoPost(jsonEdit.id, jsonEdit, clentPath);
+      const hasEditSucceed = editPhotoPost(jsonEdit.id, jsonEdit, clentPath, req.user.username);
     if (hasEditSucceed) {
       res.sendStatus(200);
     } else {
@@ -134,6 +212,10 @@ app.post('/edit', upload.single('img'), (req, res, next) => {
 });
 
 app.delete('/remove', (req, res) => {
+    if (!req.isAuthenticated()) {
+        res.sendStatus(401);
+        return;
+    }
   const photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
   const postIndex = photoPosts.findIndex((element) => {
     if (element.id === req.body.id) {
@@ -142,7 +224,7 @@ app.delete('/remove', (req, res) => {
     return false;
   });
 
-  if (postIndex !== -1) {
+  if (postIndex !== -1 && photoPosts[postIndex].author===req.user.username) {
     photoPosts[postIndex].visible = false;
     res.status(200);
     res.end();
@@ -206,6 +288,10 @@ app.get('*', (req, res) => {
 });
 
 app.post('/like', (req, res) => {
+    if (!req.isAuthenticated()) {
+        res.sendStatus(401);
+        return;
+    }
   const photoPosts = JSON.parse(fs.readFileSync('server/data/posts.json', 'utf8'));
   const postIndex = photoPosts.findIndex((element) => {
     if (element.id === req.body.id) {
@@ -229,6 +315,10 @@ app.post('/like', (req, res) => {
 });
 
 app.post('/add', upload.single('img'), (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        res.sendStatus(401);
+        return;
+    }
   if (!req.file) {
     res.sendStatus(400);
     return;
@@ -239,6 +329,10 @@ app.post('/add', upload.single('img'), (req, res, next) => {
   const jsonPost = JSON.parse(req.body.postData);
 
   if (validatePhotoPost(jsonPost)) { // check request post data for validity
+      if(jsonPost.author!==req.user.username){
+          res.sendStatus(401);
+          return;
+      }
     const tmp_path = req.file.path;
     const targetPath = `${tmp_path}.${req.file.originalname.split('.').pop()}`;
     const clentPath = serverPath + targetPath.split('\\').pop(); // target_path.replace(/\\/g, '/');
@@ -279,6 +373,37 @@ app.post('/subscribe', (req, res) => {
   } else {
     SYNC_LIST.closeConnection(req.body.username, 200);
   }
+});
+
+app.post('/login', function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            res.sendStatus(401);
+            return;
+        }
+        req.logIn(user, function (err) {
+            if (err) {
+                return next(err);
+            }
+            console.log("username: " + req.user.username + " authenticated.");
+            return res.status(200).send(req.user.username);
+        });
+    })(req, res, next);
+});
+
+app.post('/logout', function(req, res){
+    if(req.isAuthenticated()){
+        req.session.destroy();
+        req.logout();
+    }
+    res.status(200).send();
+});
+
+app.post('/checkSession', function (req, res) {
+    res.status(200).send( req.isAuthenticated() ? req.user.username : "");
 });
 
 app.listen(3000, () => {

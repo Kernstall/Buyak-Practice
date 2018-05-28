@@ -1,14 +1,17 @@
 const AUTH = (function () {
   const tagIdCounter = 0;
-
   return {
-    loginAction() {
+    async loginAction() {
       const feedHolder = document.getElementsByClassName('feedAndFilterHolder')[0];
       if (username !== '') {
-        username = '';
-        localStorage.username = '';
-        VIEW.toPostFeed();
-        VIEW.updateHeader();
+          let isLoggedOut = await DAO.sendLogoutRequest();
+          if(isLoggedOut){
+              username = "";
+              VIEW.toPostFeed();
+              VIEW.updateHeader();
+          }else{
+              //TODO::error message
+          }
       } else {
         while (feedHolder.firstChild) {
           feedHolder.removeChild(feedHolder.firstChild);
@@ -22,23 +25,15 @@ const AUTH = (function () {
       return false;
     },
 
-    loginSubmitAction() {
-      const usersArr =
-                [
-                  { username: 'Alex B.', password: 'admin' },
-                  { username: 'simpleUser', password: 'user' }
-                ]; // JSON.parse(localStorage.users);TODO::change auth
+    async loginSubmitAction() {
       const formHTML = document.querySelector('.login-form');
       const formData = new FormData(formHTML);
-      const foundUser = usersArr.find((element) => {
-        if (element.username === formData.get('username') && element.password === formData.get('password')) {
-          return true;
-        }
-        return false;
-      });
-      if (foundUser !== undefined) {
-        username = foundUser.username;
-        // CONTROLLER.subscribeToUpdates();
+
+      const serverResponse = await DAO.sendLoginRequest(formData.get('username'), formData.get('password'));
+
+        //console.log(serverResponse);
+      if (serverResponse !== undefined) {
+        username = serverResponse;
         VIEW.toPostFeed();
         VIEW.updateHeader();
       } else {
@@ -52,6 +47,11 @@ const AUTH = (function () {
         }, 3000);
       }
       return false;
-    }
+    },
+
+      async checkSession(){
+        username = await DAO.checkSession();
+        VIEW.updateHeader();
+      }
   };
 }());
